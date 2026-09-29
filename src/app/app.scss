@@ -1,0 +1,50 @@
+:host {
+  display: block;
+}
+
+main {
+  display: block;
+  min-height: 100vh;
+}
+
+/* Cortina de transición entre páginas */
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  visibility: hidden;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+
+  &__panel {
+    position: absolute;
+    inset: 0;
+
+    &:nth-child(1) {
+      background: var(--tomato-logo);
+    }
+    &:nth-child(2) {
+      background: var(--tomato);
+    }
+    &:nth-child(3) {
+      background: var(--green-900);
+    }
+  }
+
+  &__logo {
+    position: relative;
+    width: 150px;
+    height: auto;
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* En celular, las fichas y la reserva ya tienen su propio enlace de WhatsApp:
+   se oculta el botón flotante para que no tape precios ni campos */
+@media (max-width: 980px) {
+  app-whatsapp-fab.lift {
+    display: none;
+  }
+}

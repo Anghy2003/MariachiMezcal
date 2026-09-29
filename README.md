@@ -1,59 +1,47 @@
-# MariachiMezcal
+# Mariachi Mezcal — sitio web
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.8.
+Landing de una sola página + fichas de cada servicio, en **Angular 21** con animaciones **GSAP** (ScrollTrigger, SplitText, Flip, DrawSVG) y desplazamiento suave **Lenis**. Basado en el diseño final de Figma (versión minimalista) con los ajustes pendientes ya aplicados.
 
-## Development server
-
-To start a local development server, run:
+## Cómo verlo
 
 ```bash
-ng serve
+npm install
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Abre http://localhost:4200. Para la versión de producción: `npm run build` (queda en `dist/mariachi-mezcal`).
 
-## Code scaffolding
+## Páginas y ajustes aplicados
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+| Página / sección | Qué tiene |
+|---|---|
+| Portada (3 fotos) | Texto exacto del Figma. El título entra gigante y se achica hasta su lugar (efecto de la referencia); las fotos cambian con cortina y zoom lento; contadores y barra de progreso. |
+| En vivo | 2 videos en bucle y "Nuestros artistas" (con espacios de muestra hasta tener el material). |
+| Nuestra historia | Foto con profundidad al bajar, texto que aparece por líneas, cifras que cuentan. |
+| Nuestros servicios | Las 5 tarjetas del Figma (descripción, etiqueta y "¡Lo quiero!"). |
+| Nuestros paquetes | 6 tarjetas limpias (fondo crema) que llevan directo a la ficha; reordenar por precio con animación. |
+| Serenatas internacionales | Nuevo servicio por videollamada, con celular animado. |
+| Promociones | Solo regalos gratis: oso sin fondo que flota, cuy recortado (sin la señora), ilustración del Show del Patrón que se dibuja sola. Se quitó "Personaliza tu paquete". |
+| 3 pasos + "Sé parte de nuestra historia" | Camino punteado que se dibuja y pasos en secuencia. |
+| Reserva | Solo aparece cuando hay algo en el carrito. Total en vivo, validación y mensaje completo para WhatsApp. |
+| Contáctanos | Teléfono, correo, dirección, horario, WhatsApp, redes y mapa oscuro de Cuenca. |
+| Momentos reales | Carrusel de 12 elementos (fotos + espacios para video), avanza solo y se puede deslizar. |
+| Preguntas frecuentes | Solo las 4 preguntas reales de la clienta. |
+| Fichas de servicio (6) | `/servicios/solista`, `show-del-patron`, `duos`, `trio`, `grupos`, `misas`. Cada una con su efecto propio: haz de luz (Solista), confeti (Patrón), destellos entrelazados (Dúos), notas musicales (Trío), papel picado (Grupos) y luz de vela (Misas). |
+| Acceso interno | Solo el botón y una pantalla "próximamente"; el panel se hace después. |
 
-```bash
-ng generate component component-name
-```
+Extras en todo el sitio: pantalla de bienvenida con el logo, cursor personalizado, botones magnéticos, cortina entre páginas, carrito lateral (se guarda en el navegador), botón flotante de WhatsApp. Si la persona pidió "reducir movimiento" en su sistema, las animaciones se desactivan.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Dónde cambiar cosas
 
-```bash
-ng generate --help
-```
+- **Precios, paquetes y textos de los servicios:** `src/app/data/services.data.ts`
+- **Teléfono, correo, redes:** `src/app/data/site.data.ts`
+- **Fotos:** `public/img/`
+- **Videos de "En vivo":** en `src/app/home/en-vivo.component.ts`, agregar `src: 'video/archivo.mp4'` a cada video y poner el archivo en `public/video/`.
 
-## Building
+## Pendiente
 
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- Videos reales y fotos de los artistas, de los adicionales (vaquita loca, ramo, vino, chocolates) y de la videollamada.
+- Confirmar con la clienta los precios de Dúos (4 canciones con regalo $35, 7 canciones $55) y de los adicionales (vaquita $15, chocolates $8, vinos $12): se tomaron del diseño de Figma.
+- Las reservas no se guardan en un servidor: el formulario arma el mensaje de WhatsApp. Para recibirlas por correo o en el panel hace falta un backend.
+- Permiso de las familias (y sobre todo de los niños) que aparecen en las fotos reales antes de publicar.

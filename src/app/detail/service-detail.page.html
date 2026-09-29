@@ -1,0 +1,125 @@
+@let s = service();
+<div class="page" [attr.data-effect]="s.effect">
+  <div class="topbar container">
+    <button class="back" (click)="close()"><app-icon name="arrow-left" /> Volver a los servicios</button>
+    <button class="x" (click)="close()" aria-label="Cerrar"><app-icon name="close" /></button>
+  </div>
+
+  <div class="container grid">
+    <!-- Izquierda: foto con el efecto propio del servicio -->
+    <div class="gallery">
+      <div class="main" [class.cutout]="s.cutout">
+        @if (s.cutout) {
+          <span class="halo"></span>
+        }
+        <img [src]="photo()" [alt]="s.name" [style.object-position]="photo() === s.image ? (s.imagePosition ?? 'center') : 'center'" [class.is-cutout]="s.cutout && photo() === s.image" />
+        <app-effect-canvas #fx class="fx" [mode]="s.effect" />
+        <span class="where">Cuenca, EC</span>
+      </div>
+      <div class="thumbs">
+        @for (g of s.gallery; track g) {
+          <button [class.on]="g === photo()" [class.cutout]="g.includes('oso')" (click)="swap(g)" [attr.aria-label]="'Ver foto ' + ($index + 1)">
+            <img [src]="g" alt="" loading="lazy" />
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Derecha: información -->
+    <div class="info">
+      <div class="head">
+        <h1 class="title">{{ s.shortName }}</h1>
+        <app-starburst [small]="s.packages.length > 1 ? 'Desde' : ''" [text]="'$' + s.from" [size]="96" [float]="true" />
+      </div>
+      <div class="divider"><span></span></div>
+      <p class="tagline">{{ s.tagline }}</p>
+      <p class="intro">{{ s.intro }}</p>
+
+      <div class="block">
+        <div class="block__head"><h2>Elige tu paquete</h2><span>{{ s.packages.length }} {{ s.packages.length === 1 ? 'opción' : 'opciones' }}</span></div>
+        <div class="rows" role="radiogroup" [attr.aria-label]="'Paquetes de ' + s.name">
+          @for (p of s.packages; track p.id) {
+            <button class="row pkg" role="radio" [attr.aria-checked]="p.id === selected().id" [class.is-active]="p.id === selected().id" (click)="choose(p.id, $event)">
+              <span class="radio"></span>
+              <span class="txt">
+                <b>{{ p.name }} @if (p.tag) { <em>{{ p.tag }}</em> }</b>
+                <small>{{ p.note }}</small>
+              </span>
+              <span class="price">${{ p.price }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      @if (s.addons) {
+        <div class="block">
+          <div class="block__head"><h2>Puedes añadir</h2><span>Opcionales</span></div>
+          <div class="rows">
+            @for (a of addons; track a.id) {
+              <div class="row addon" [class.on]="isOn(a.id)">
+                <label>
+                  <input type="checkbox" [checked]="isOn(a.id)" (change)="toggleAddon(a.id)" />
+                  <i><app-icon name="check" /></i>
+                  {{ a.name }} @if (a.options) { <small>(desde ${{ a.options[0] }})</small> }
+                </label>
+                @if (a.options && isOn(a.id)) {
+                  <span class="sizes">
+                    @for (o of a.options; track o) {
+                      <button type="button" [class.on]="extras()[a.id] === o" (click)="setAddon(a.id, o)">${{ o }}</button>
+                    }
+                  </span>
+                } @else {
+                  <span class="chip">+ ${{ a.price }}</span>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <p class="includes block"><app-icon name="shield" /> Incluye en todos los servicios: {{ included.join(' · ') }}.</p>
+
+      <div class="total block">
+        <div>
+          <span>Total estimado</span>
+          <small>{{ selected().name }}@if (hasExtras()) { · con adicionales }</small>
+        </div>
+        <b>${{ shownTotal() }}</b>
+      </div>
+
+      <div class="cta block">
+        <button class="btn reserve" [class.done]="added()" magnetic="0.12" (click)="reserve()">
+          @if (added()) { <app-icon name="check" /> Agregado · llevándote a reservar } @else { Reservar en línea <app-icon name="arrow-right" /> }
+        </button>
+        <a class="wa" [href]="waLink()" target="_blank" rel="noopener"><app-icon name="whatsapp" /> o escríbenos por WhatsApp</a>
+      </div>
+
+      <p class="description block">{{ s.description }}</p>
+    </div>
+  </div>
+
+  <section class="more container">
+    <div class="more__head">
+      <h2 reveal="lines">También te podría gustar</h2>
+      <p>Descubre otra forma de sorprender a tu persona especial.</p>
+    </div>
+    <div class="more__grid" reveal="stagger">
+      @for (o of suggestions(); track o.slug) {
+        <button class="suggest" tilt="8" (click)="nav.service(o.slug)">
+          <div class="suggest__img" [class.cutout]="o.cutout">
+            <img [src]="o.image" [alt]="o.name" [style.object-position]="o.imagePosition ?? 'center'" loading="lazy" />
+          </div>
+          <span class="suggest__label">{{ o.label }}</span>
+          <b>{{ o.shortName }}</b>
+          <small>{{ o.priceLabel }}</small>
+        </button>
+      }
+    </div>
+  </section>
+
+  <!-- Barra fija en celular -->
+  <div class="sticky">
+    <div><span>Total</span><b>${{ shownTotal() }}</b></div>
+    <button class="btn btn--sm" (click)="reserve()">Reservar en línea</button>
+  </div>
+</div>
