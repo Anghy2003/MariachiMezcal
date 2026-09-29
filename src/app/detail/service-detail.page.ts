@@ -97,12 +97,19 @@ export class ServiceDetailPage {
       const target = this.total();
       untracked(() => {
         this.totalTween?.kill();
-        if (prefersReducedMotion()) {
+        // Sin animación si la persona la desactivó o si la pestaña no está visible (el total nunca queda desfasado)
+        if (prefersReducedMotion() || document.hidden) {
           this.shownTotal.set(target);
           return;
         }
         const state = { v: this.shownTotal() };
-        this.totalTween = gsap.to(state, { v: target, duration: 0.7, ease: 'power3.out', onUpdate: () => this.shownTotal.set(Math.round(state.v)) });
+        this.totalTween = gsap.to(state, {
+          v: target,
+          duration: 0.7,
+          ease: 'power3.out',
+          onUpdate: () => this.shownTotal.set(Math.round(state.v)),
+          onComplete: () => this.shownTotal.set(target),
+        });
       });
     });
 
