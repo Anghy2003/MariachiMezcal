@@ -12,7 +12,8 @@ interface LiveVideo {
 
 /**
  * "En vivo": dos videos destacados en bucle y los artistas.
- * Mientras llegan los videos reales, se muestra la foto con movimiento lento y la etiqueta "Video próximamente".
+ * Por ahora son fotos con un zoom lento. Cuando la clienta envíe los videos, basta con agregar `src`
+ * a cada uno: entonces se reproducen en bucle y aparece el botón de sonido.
  */
 @Component({
   selector: 'app-en-vivo',
@@ -31,16 +32,14 @@ interface LiveVideo {
           @for (v of videos; track v.title) {
             <figure class="video">
               @if (v.src) {
+                <!-- Solo cuando haya un video real se muestran sus controles -->
                 <video [src]="v.src" [poster]="v.poster" autoplay muted loop playsinline [muted]="muted()"></video>
+                <button class="sound" (click)="muted.set(!muted())" [attr.aria-label]="muted() ? 'Activar sonido' : 'Silenciar'">
+                  <app-icon [name]="muted() ? 'mute' : 'sound'" />
+                </button>
               } @else {
-                <img [src]="v.poster" alt="" class="kenburns" />
-                <div class="soon"><app-icon name="play" /> Video próximamente</div>
+                <img [src]="v.poster" [alt]="v.title" class="kenburns" />
               }
-              <span class="live"><i></i> En vivo</span>
-              <button class="sound" (click)="muted.set(!muted())" [attr.aria-label]="muted() ? 'Activar sonido' : 'Silenciar'">
-                <app-icon [name]="muted() ? 'mute' : 'sound'" />
-              </button>
-              <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
               <figcaption>{{ v.title }}</figcaption>
             </figure>
           }
@@ -78,25 +77,10 @@ interface LiveVideo {
     }
     .video img, .video video { width: 100%; height: 100%; object-fit: cover; }
     .video::after { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(18, 22, 19, 0.85), transparent 45%); pointer-events: none; }
-    .live {
-      position: absolute; top: 18px; left: 18px; z-index: 2;
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
-      background: rgba(18, 22, 19, 0.6); backdrop-filter: blur(8px); padding: 7px 12px; border-radius: 999px;
-    }
-    .live i { width: 8px; height: 8px; border-radius: 50%; background: #e0493a; animation: blink 1.4s ease-in-out infinite; }
-    @keyframes blink { 50% { opacity: 0.25; } }
     .sound { position: absolute; top: 14px; right: 14px; z-index: 2; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-size: 18px; background: rgba(18, 22, 19, 0.55); backdrop-filter: blur(8px); }
-    .soon { position: absolute; inset: 0; z-index: 1; display: grid; place-content: center; grid-auto-flow: column; gap: 10px; align-items: center; font-family: var(--font-poster); font-size: 22px; letter-spacing: 0.1em; color: var(--cream); text-shadow: 0 2px 20px rgba(0,0,0,0.6); }
-    .soon app-icon { width: 54px; height: 54px; padding: 16px; border-radius: 50%; background: var(--tomato); box-shadow: 0 0 0 10px rgba(163, 74, 44, 0.3); animation: ring 2.2s ease-out infinite; }
-    @keyframes ring { 0% { box-shadow: 0 0 0 0 rgba(163, 74, 44, 0.5); } 100% { box-shadow: 0 0 0 26px rgba(163, 74, 44, 0); } }
     .kenburns { animation: kb 18s ease-in-out infinite alternate; }
     @keyframes kb { from { transform: scale(1.02); } to { transform: scale(1.14) translate(-2%, -1%); } }
-    .eq { position: absolute; left: 22px; bottom: 20px; z-index: 2; display: flex; gap: 3px; align-items: flex-end; height: 18px; }
-    .eq i { width: 3px; background: var(--tomato-logo); animation: eq 1s ease-in-out infinite; }
-    .eq i:nth-child(2) { animation-delay: -0.3s; } .eq i:nth-child(3) { animation-delay: -0.6s; } .eq i:nth-child(4) { animation-delay: -0.15s; } .eq i:nth-child(5) { animation-delay: -0.45s; }
-    @keyframes eq { 0%, 100% { height: 20%; } 50% { height: 100%; } }
-    figcaption { position: absolute; left: 56px; bottom: 16px; z-index: 2; font-family: var(--font-serif); font-size: 20px; }
+    figcaption { position: absolute; left: 22px; bottom: 16px; z-index: 2; font-family: var(--font-serif); font-size: 20px; }
     .artists { margin-top: 90px; text-align: center; }
     .artists h3 { font-family: var(--font-poster); font-weight: 400; font-size: 26px; letter-spacing: 0.14em; margin: 0 0 34px; }
     .artists ul { list-style: none; margin: 0; padding: 0; display: flex; justify-content: center; gap: clamp(28px, 6vw, 80px); }
@@ -113,9 +97,7 @@ interface LiveVideo {
     }
     @media (max-width: 560px) {
       .videos { gap: 18px; }
-      figcaption { left: 48px; bottom: 14px; font-size: 16px; }
-      .soon { font-size: 17px; }
-      .soon app-icon { width: 44px; height: 44px; padding: 13px; }
+      figcaption { left: 16px; bottom: 12px; font-size: 16px; }
       .artists { margin-top: 60px; }
       .artists ul { gap: 20px 28px; }
       .portrait { width: 88px; height: 88px; }

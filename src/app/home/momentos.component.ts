@@ -8,7 +8,6 @@ import { PapelPicadoComponent } from '../shared/papel-picado.component';
 interface Moment {
   src: string;
   caption: string;
-  video?: boolean;
   pos?: string;
 }
 
@@ -33,10 +32,7 @@ const AUTOPLAY = 5;
           @for (m of moments; track m.src + $index; let i = $index) {
             <figure class="slide" [attr.aria-hidden]="i !== index()">
               <img [src]="m.src" [style.object-position]="m.pos ?? '50% 40%'" alt="" loading="lazy" draggable="false" />
-              @if (m.video) {
-                <div class="video-tag"><span><app-icon name="play" /></span> Video próximamente</div>
-              }
-              <figcaption><span class="tag">{{ m.video ? 'Video' : 'Foto' }}</span> {{ m.caption }}</figcaption>
+              <figcaption>{{ m.caption }}</figcaption>
             </figure>
           }
           <button class="nav prev" (click)="go(index() - 1)" aria-label="Anterior"><app-icon name="arrow-left" /></button>
@@ -57,7 +53,6 @@ const AUTOPLAY = 5;
           @for (m of moments; track $index; let i = $index) {
             <button [class.on]="i === index()" (click)="go(i)" [attr.aria-label]="m.caption">
               <img [src]="m.src" alt="" loading="lazy" />
-              @if (m.video) { <app-icon name="play" /> }
             </button>
           }
         </div>
@@ -79,10 +74,6 @@ const AUTOPLAY = 5;
     .slide img { width: 100%; height: 100%; object-fit: cover; }
     .slide::after { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(18,22,19,0.85), transparent 40%); }
     figcaption { position: absolute; z-index: 1; left: 28px; bottom: 24px; display: flex; align-items: center; gap: 12px; font-family: var(--font-poster); font-size: clamp(22px, 2.4vw, 32px); letter-spacing: 0.05em; }
-    .tag { font-family: var(--font-body); font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; background: var(--tomato); padding: 5px 10px; border-radius: 6px; }
-    .video-tag { position: absolute; z-index: 1; inset: 0; display: grid; place-content: center; grid-auto-flow: column; align-items: center; gap: 14px; font-family: var(--font-poster); font-size: 24px; letter-spacing: 0.1em; text-shadow: 0 2px 18px rgba(0,0,0,0.6); }
-    .video-tag span { width: 70px; height: 70px; border-radius: 50%; display: grid; place-items: center; font-size: 26px; background: var(--tomato); animation: ring 2.2s ease-out infinite; }
-    @keyframes ring { 0% { box-shadow: 0 0 0 0 rgba(163,74,44,0.6); } 100% { box-shadow: 0 0 0 30px rgba(163,74,44,0); } }
     .nav { position: absolute; z-index: 2; top: 50%; translate: 0 -50%; width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; font-size: 22px; background: rgba(18,22,19,0.45); backdrop-filter: blur(8px); box-shadow: inset 0 0 0 1px rgba(244,238,227,0.35); transition: background 0.3s, transform 0.4s var(--ease-out); }
     .nav:hover { background: var(--tomato); transform: scale(1.08); }
     .prev { left: 20px; } .next { right: 20px; }
@@ -99,7 +90,6 @@ const AUTOPLAY = 5;
     .thumbs button:hover { opacity: 0.8; transform: translateY(-3px); }
     .thumbs button.on { opacity: 1; box-shadow: 0 0 0 2px var(--tomato-logo); }
     .thumbs img { width: 100%; height: 100%; object-fit: cover; }
-    .thumbs app-icon { position: absolute; inset: 0; margin: auto; font-size: 20px; }
     .cta { display: flex; justify-content: space-between; align-items: center; gap: 24px; margin-top: 50px; padding-top: 34px; border-top: 1px solid var(--cream-faint); }
     .cta h3 { margin: 0; font-family: var(--font-poster); font-weight: 400; font-size: 30px; letter-spacing: 0.05em; }
     .cta p { margin: 4px 0 0; color: var(--cream-muted); }
@@ -111,8 +101,6 @@ const AUTOPLAY = 5;
     }
     @media (max-width: 560px) {
       figcaption { left: 16px; right: 16px; bottom: 14px; font-size: 20px; flex-wrap: wrap; gap: 8px; }
-      .video-tag { font-size: 17px; }
-      .video-tag span { width: 54px; height: 54px; font-size: 20px; }
       .thumbs button { width: 80px; }
       .cta .btn { width: 100%; }
       .cta h3 { font-size: 26px; }
@@ -124,11 +112,11 @@ export class MomentosComponent {
   readonly index = signal(0);
   readonly moments: Moment[] = [
     { src: 'img/real-cumple.webp', caption: 'Cumpleaños sorpresa con oso amoroso', pos: '50% 45%' },
-    { src: 'img/real-parque.webp', caption: 'Serenata en el parque', video: true, pos: '50% 35%' },
+    { src: 'img/real-parque.webp', caption: 'Serenata en el parque', pos: '50% 35%' },
     { src: 'img/real-abuelita.webp', caption: 'La abuelita de la fiesta', pos: '50% 30%' },
     { src: 'img/real-jardin.webp', caption: 'Celebración en familia', pos: '50% 60%' },
     { src: 'img/real-restaurante.webp', caption: 'Celebración especial', pos: '50% 35%' },
-    { src: 'img/real-cuy.webp', caption: 'El cuysito disfrazado', video: true, pos: '50% 30%' },
+    { src: 'img/real-cuy.webp', caption: 'El cuysito disfrazado', pos: '50% 30%' },
     { src: 'img/patron-grupo.webp', caption: 'Grupo completo con mascotas', pos: '50% 50%' },
     { src: 'img/pareja-iglesia.webp', caption: 'Elegancia en cada presentación', pos: '50% 35%' },
     { src: 'img/grupo-centro.webp', caption: 'En el centro histórico de Cuenca', pos: '50% 60%' },
