@@ -33,7 +33,7 @@ import { EffectCanvasComponent } from '../shared/effect-canvas.component';
 
           <article class="card" tilt="7">
             <div class="art photo">
-              <img src="img/cuy.webp" alt="Mascota del cuysito disfrazado" loading="lazy" />
+              <img src="img/cuy-mascota.webp" alt="Mascota del cuysito disfrazado" loading="lazy" style="object-position: 50% 22%" />
             </div>
             <app-starburst class="free" text="¡Gratis!" [size]="84" />
             <h3>Cuysito disfrazado</h3>
@@ -42,7 +42,7 @@ import { EffectCanvasComponent } from '../shared/effect-canvas.component';
 
           <article class="card" tilt="7">
             <div class="art photo">
-              <img src="img/patron-1.webp" alt="El Patrón en una serenata de cumpleaños" loading="lazy" style="object-position: 50% 16%" />
+              <img src="img/patron-1.webp" alt="El Patrón en una serenata de cumpleaños" loading="lazy" style="object-position: 50% 18%" />
             </div>
             <app-starburst class="free" text="¡Gratis!" [size]="84" />
             <h3>Show del Patrón</h3>
@@ -67,7 +67,8 @@ import { EffectCanvasComponent } from '../shared/effect-canvas.component';
     .container { position: relative; z-index: 2; }
     .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
     .card { position: relative; background: var(--cream); color: var(--ink); border-radius: 24px; padding: 20px 20px 28px; box-shadow: 0 0 0 1px rgba(30, 38, 32, 0.08), 0 30px 60px -34px rgba(0, 0, 0, 0.6); }
-    .art { position: relative; height: 250px; border-radius: 18px; overflow: hidden; display: grid; place-items: center; background: var(--cream-2); }
+    /* Más alto que ancho casi: las fotos verticales ya no cortan caras ni sombreros */
+    .art { position: relative; aspect-ratio: 5 / 4; border-radius: 18px; overflow: hidden; display: grid; place-items: center; background: var(--cream-2); }
     .photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; transition: transform 1s var(--ease-out); }
     .card:hover .photo img { transform: scale(1.07); }
     .free { position: absolute; top: 6px; right: 6px; z-index: 2; }
@@ -81,7 +82,6 @@ import { EffectCanvasComponent } from '../shared/effect-canvas.component';
       .banner { grid-template-columns: 1fr; justify-items: start; }
     }
     @media (max-width: 560px) {
-      .art { height: 220px; }
       h3 { font-size: 28px; }
       .banner { padding: 24px 22px; gap: 18px; }
       .banner .btn { width: 100%; }
