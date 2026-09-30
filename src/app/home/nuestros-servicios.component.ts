@@ -129,8 +129,8 @@ export class NuestrosServiciosComponent {
       subtitle: 'Show cómico teatralizado',
       text: 'Personaje charro del patrón + serenata de 3 canciones. Bromas sanas, animación cómica y risas garantizadas.',
       chip: 'Animación de risas',
-      image: 'img/patron-1.webp',
-      position: '50% 20%',
+      image: 'img/patron-3.webp',
+      position: '50% 15%',
     },
     {
       slug: 'duos',

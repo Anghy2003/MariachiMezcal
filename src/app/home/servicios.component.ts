@@ -40,7 +40,7 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
               <div class="flyer">
                 <!-- La foto ocupa toda la tarjeta; los recuadros van encima dejando verla entre ellos -->
                 <button class="bg" (click)="nav.service(s.slug)" [attr.aria-label]="s.name">
-                  <app-photo-cycle [images]="photos(s)" [position]="s.cutout ? '50% 30%' : (s.imagePosition ?? 'center')" [delay]="i * 700 + 400" />
+                  <app-photo-cycle [images]="photos(s)" [position]="s.cutout ? '50% 15%' : (s.imagePosition ?? 'center')" [delay]="i * 700 + 400" />
                 </button>
                 <span class="title">{{ s.shortName }}</span>
 

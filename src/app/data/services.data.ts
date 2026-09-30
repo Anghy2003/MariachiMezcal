@@ -106,9 +106,9 @@ export const SERVICES: Service[] = [
     cutout: true,
     gallery: [
       'img/oso.webp',
+      'img/patron-3.webp',
       'img/patron-1.webp',
       'img/patron-2.webp',
-      'img/patron-3.webp',
       'img/patron-4.webp',
       'img/patron-5.webp',
       'img/patron-6.webp',
