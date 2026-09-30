@@ -54,6 +54,7 @@ export const ADDONS: Addon[] = [
   { id: 'vaquita', name: 'Vaquita loca', price: 15, image: 'img/regalos/vaquita.webp' },
   { id: 'chocolates', name: 'Chocolates', price: 8, image: 'img/regalos/chocolates.webp' },
   { id: 'vinos', name: 'Vinos', price: 12, image: 'img/regalos/vino.webp' },
+  { id: 'cuy', name: 'Cuysito disfrazado', price: 5, image: 'img/regalos/cuy.webp' },
 ];
 
 export const INCLUDED = [

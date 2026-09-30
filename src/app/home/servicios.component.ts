@@ -169,8 +169,9 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
     /* ---------- Adicionales ---------- */
     .extras { margin-top: 64px; text-align: center; }
     .extras h3 { margin: 0 0 26px; font-family: var(--font-serif); font-weight: 500; font-size: clamp(24px, 2.4vw, 32px); color: var(--ink); }
-    .extras ul { list-style: none; margin: 0 auto; padding: 0; max-width: 980px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
-    .extras li { display: grid; justify-items: center; gap: 6px; padding: 24px 14px 20px; border-radius: 16px; background: #fff; box-shadow: 0 18px 40px -30px rgba(30, 38, 32, 0.55); }
+    /* Tarjetas en fila que se reparten solas; la que sobra queda centrada */
+    .extras ul { list-style: none; margin: 0 auto; padding: 0; max-width: 1100px; display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; }
+    .extras li { flex: 0 0 calc((100% - 72px) / 5); display: grid; justify-items: center; gap: 6px; padding: 24px 14px 20px; border-radius: 16px; background: #fff; box-shadow: 0 18px 40px -30px rgba(30, 38, 32, 0.55); }
     .extras img { height: 110px; width: auto; max-width: 100%; object-fit: contain; margin-bottom: 8px; filter: drop-shadow(0 10px 10px rgba(0, 0, 0, 0.18)); transition: transform 0.6s var(--ease-out); }
     .extras li:hover img { transform: translateY(-5px) rotate(-3deg); }
     .extras span { font-weight: 600; font-size: 15px; color: var(--ink); }
@@ -185,14 +186,14 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
       .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 980px) {
-      .extras ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .extras li { flex-basis: calc((100% - 36px) / 3); }
     }
     @media (max-width: 640px) {
       .head { flex-direction: column; align-items: flex-start; }
       .grid { grid-template-columns: 1fr; gap: 32px; }
       .tiles { padding: 80px 14px 14px; }
       .extras { margin-top: 48px; }
-      .extras li { padding: 18px 10px 16px; }
+      .extras li { flex-basis: calc((100% - 18px) / 2); padding: 18px 10px 16px; }
       .extras img { height: 84px; }
       .notes { grid-template-columns: 1fr; }
       .notes p { padding: 16px; }
