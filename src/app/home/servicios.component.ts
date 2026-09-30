@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Injector, afterNextRender, computed, inject, signal } from '@angular/core';
-import { ADDONS, Perk, SERVICES } from '../data/services.data';
+import { ADDONS, Perk, SERVICES, Service } from '../data/services.data';
 import { NavigationService } from '../core/navigation.service';
 import { gsap, prefersReducedMotion } from '../core/motion';
 import { RevealDirective } from '../core/directives';
@@ -38,13 +38,8 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
             <article class="card">
               <div class="flyer">
                 <!-- La foto ocupa toda la tarjeta; los recuadros van encima dejando verla entre ellos -->
-                <button class="bg" [class.cutout]="s.cutout" (click)="nav.service(s.slug)" [attr.aria-label]="s.name">
-                  @if (s.cutout) {
-                    <span class="halo"></span>
-                    <img [src]="s.image" alt="" loading="lazy" />
-                  } @else {
-                    <app-photo-cycle [images]="s.gallery" [position]="s.imagePosition ?? 'center'" [delay]="i * 700 + 400" />
-                  }
+                <button class="bg" (click)="nav.service(s.slug)" [attr.aria-label]="s.name">
+                  <app-photo-cycle [images]="photos(s)" [position]="s.cutout ? '50% 30%' : (s.imagePosition ?? 'center')" [delay]="i * 700 + 400" />
                 </button>
                 <span class="title">{{ s.shortName }}</span>
 
@@ -126,10 +121,6 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
     .bg { position: absolute; inset: 0; display: block; overflow: hidden; border-radius: inherit; }
     /* Oscurece arriba (para el título) y abajo (para los precios), el centro queda limpio */
     .bg::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(18, 22, 19, 0.75) 0%, transparent 30%, transparent 45%, rgba(18, 22, 19, 0.7) 100%); }
-    .bg.cutout { background: radial-gradient(120% 80% at 50% 100%, var(--green-800), var(--green-900) 70%); }
-    .bg.cutout .halo { position: absolute; left: 50%; top: 34%; width: 62%; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; background: var(--tomato); }
-    .bg.cutout img { position: absolute; left: 50%; top: 8%; height: 62%; width: auto; translate: -50% 0; object-fit: contain; filter: drop-shadow(0 12px 16px rgba(0, 0, 0, 0.5)); transition: transform 1s var(--ease-out); }
-    .card:hover .bg.cutout img { transform: scale(1.05); }
     .title { position: relative; z-index: 2; padding: 20px 22px 0; pointer-events: none; font-family: var(--font-serif); font-style: italic; font-weight: 500; font-size: clamp(34px, 3vw, 44px); line-height: 1; color: var(--cream); text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45); }
     .title::after { content: ''; display: block; width: 44px; height: 2px; margin-top: 10px; background: var(--tomato-logo); }
 
@@ -211,6 +202,11 @@ export class ServiciosComponent {
   readonly nav = inject(NavigationService);
   readonly order = signal<'asc' | 'desc'>('asc');
   readonly addons = ADDONS;
+
+  /** Fotos de fondo de la tarjeta (sin el recorte del Patrón, que no sirve de fondo). */
+  photos(s: Service): string[] {
+    return s.cutout ? s.gallery.filter((g) => g !== s.image) : s.gallery;
+  }
   readonly perkImage: Record<Perk, string> = {
     oso: 'img/regalos/oso.webp',
     ramo: 'img/regalos/ramo.webp',

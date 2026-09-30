@@ -113,6 +113,10 @@ export class MomentosComponent {
   readonly moments: Moment[] = [
     { src: 'img/real-cumple.webp', caption: 'Cumpleaños sorpresa con oso amoroso', pos: '50% 45%' },
     { src: 'img/real-parque.webp', caption: 'Serenata en el parque', pos: '50% 35%' },
+    { src: 'img/momento-1.webp', caption: 'Una sorpresa a dúo', pos: '50% 35%' },
+    { src: 'img/momento-2.webp', caption: 'Cumpleaños con globos', pos: '50% 45%' },
+    { src: 'img/momento-4.webp', caption: 'Serenata bajo las luces', pos: '50% 45%' },
+    { src: 'img/momento-3.webp', caption: 'Celebración en familia', pos: '50% 40%' },
     { src: 'img/real-cuy.webp', caption: 'El cuysito disfrazado', pos: '50% 30%' },
     { src: 'img/patron-grupo.webp', caption: 'Grupo completo con mascotas', pos: '50% 50%' },
     { src: 'img/pareja-iglesia.webp', caption: 'Elegancia en cada presentación', pos: '50% 35%' },

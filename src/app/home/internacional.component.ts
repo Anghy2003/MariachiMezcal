@@ -32,7 +32,7 @@ import { IconComponent } from '../shared/icon.component';
           <div class="orbit" aria-hidden="true"><span></span><span></span><span></span></div>
           <div class="phone">
             <div class="screen">
-              <img src="img/hero-duo.webp" alt="" />
+              <img src="img/videollamada.webp" alt="Serenata por videollamada" />
               <span class="rec"><i></i> En llamada · 02:14</span>
               <div class="pip">
                 <app-icon name="globe" />
@@ -59,7 +59,7 @@ import { IconComponent } from '../shared/icon.component';
     @keyframes wave { from { transform: scale(0.6); opacity: 0.9; } to { transform: scale(1.5); opacity: 0; } }
     .phone { position: relative; width: 250px; aspect-ratio: 9 / 18.5; border-radius: 40px; padding: 10px; background: var(--green-900); box-shadow: 0 50px 90px -30px rgba(0, 0, 0, 0.6), inset 0 0 0 2px rgba(244, 238, 227, 0.15); }
     .screen { position: relative; width: 100%; height: 100%; border-radius: 30px; overflow: hidden; }
-    .screen img { width: 100%; height: 100%; object-fit: cover; object-position: 55% 30%; }
+    .screen img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; }
     .screen::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.35), transparent 25%, transparent 70%, rgba(0,0,0,0.55)); }
     .rec { position: absolute; z-index: 1; top: 14px; left: 50%; translate: -50% 0; white-space: nowrap; font-size: 10.5px; letter-spacing: 0.1em; background: rgba(0,0,0,0.45); padding: 5px 10px; border-radius: 999px; display: flex; align-items: center; gap: 6px; }
     .rec i { width: 6px; height: 6px; border-radius: 50%; background: #3ddc84; animation: blink 1.2s infinite; }
