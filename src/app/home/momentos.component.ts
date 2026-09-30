@@ -140,13 +140,13 @@ export class MomentosComponent {
   /** Los videos arrancan en silencio (los navegadores no dejan reproducir con sonido sin un toque). */
   readonly muted = signal(true);
   readonly moments: Moment[] = [
+    { src: 'video/momento-video-1.jpg', video: 'video/momento-video-1.mp4', caption: 'El cuysito con la tricolor' },
     { src: 'video/momento-video-2.jpg', video: 'video/momento-video-2.mp4', caption: 'Serenatas desde $25' },
     { src: 'img/real-cumple.webp', caption: 'Cumpleaños sorpresa con oso amoroso', pos: '50% 45%' },
     { src: 'img/real-parque.webp', caption: 'Serenata en el parque', pos: '50% 35%' },
     { src: 'img/momento-1.webp', caption: 'Una sorpresa a dúo', pos: '50% 35%' },
     { src: 'img/momento-2.webp', caption: 'Cumpleaños con globos', pos: '50% 45%' },
     { src: 'img/momento-4.webp', caption: 'Serenata bajo las luces', pos: '50% 45%' },
-    { src: 'video/momento-video-1.jpg', video: 'video/momento-video-1.mp4', caption: 'El cuysito con la tricolor' },
     { src: 'img/momento-3.webp', caption: 'Celebración en familia', pos: '50% 40%' },
     { src: 'img/real-cuy.webp', caption: 'El cuysito disfrazado', pos: '50% 30%' },
     { src: 'video/momento-video-3.jpg', video: 'video/momento-video-3.mp4', caption: 'Nuestros mariachis te invitan' },
