@@ -148,6 +148,8 @@ export class MomentosComponent {
     { src: 'img/momento-2.webp', caption: 'Cumpleaños con globos', pos: '50% 45%' },
     { src: 'img/momento-4.webp', caption: 'Serenata bajo las luces', pos: '50% 45%' },
     { src: 'img/momento-3.webp', caption: 'Celebración en familia', pos: '50% 40%' },
+    { src: 'img/patron-7.webp', caption: 'Cumpleaños con los ositos', pos: '50% 40%' },
+    { src: 'img/patron-6.webp', caption: 'Sorpresa con oso amoroso', pos: '50% 35%' },
     { src: 'img/real-cuy.webp', caption: 'El cuysito disfrazado', pos: '50% 30%' },
     { src: 'video/momento-video-3.jpg', video: 'video/momento-video-3.mp4', caption: 'Nuestros mariachis te invitan' },
     { src: 'img/pareja-iglesia.webp', caption: 'Elegancia en cada presentación', pos: '50% 35%' },
