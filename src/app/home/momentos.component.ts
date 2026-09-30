@@ -149,6 +149,7 @@ export class MomentosComponent {
     { src: 'video/momento-video-1.jpg', video: 'video/momento-video-1.mp4', caption: 'El cuysito con la tricolor' },
     { src: 'img/momento-3.webp', caption: 'Celebración en familia', pos: '50% 40%' },
     { src: 'img/real-cuy.webp', caption: 'El cuysito disfrazado', pos: '50% 30%' },
+    { src: 'video/momento-video-3.jpg', video: 'video/momento-video-3.mp4', caption: 'Nuestros mariachis te invitan' },
     { src: 'img/patron-grupo.webp', caption: 'Grupo completo con mascotas', pos: '50% 50%' },
     { src: 'img/pareja-iglesia.webp', caption: 'Elegancia en cada presentación', pos: '50% 35%' },
     { src: 'img/grupo-centro.webp', caption: 'En el centro histórico de Cuenca', pos: '50% 60%' },
