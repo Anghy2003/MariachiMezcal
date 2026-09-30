@@ -145,12 +145,12 @@ export const SERVICES: Service[] = [
     gallery: ['img/duo.webp', 'img/hero-duo.webp', 'img/duo-3.webp', 'img/pareja-iglesia.webp'],
     packages: [
       { id: 'duo-4a', name: '4 canciones', note: 'No incluye ramo ni osito', price: 30 },
-      { id: 'duo-4b', name: '4 canciones', note: 'Gratis a elegir: oso, ramo o Show del Patrón', price: 35, tag: 'Más elegido', gifts: ['Ramo de flores', 'Oso amoroso', 'Show del Patrón'] },
-      { id: 'duo-5', name: '5 canciones', note: 'Gratis a elegir: oso, ramo o Show del Patrón', price: 37, gifts: ['Ramo de flores', 'Oso amoroso', 'Show del Patrón'] },
-      { id: 'duo-6', name: '6 canciones', note: 'Gratis a elegir: oso, ramo o Show del Patrón', price: 40, gifts: ['Ramo de flores', 'Oso amoroso', 'Show del Patrón'] },
+      { id: 'duo-4b', name: '4 canciones', note: 'Gratis a elegir: oso, ramo o Show del Patrón', price: 35, tag: 'Más elegido', gifts: ['Ramo de flores', 'Oso amoroso', 'Show del Patrón'], perks: ['oso', 'ramo'] },
+      { id: 'duo-5', name: '5 canciones', note: 'Gratis a elegir: oso, ramo o Show del Patrón', price: 37, gifts: ['Ramo de flores', 'Oso amoroso', 'Show del Patrón'], perks: ['oso', 'ramo'] },
+      { id: 'duo-6', name: '6 canciones', note: 'Gratis a elegir: oso, ramo o Show del Patrón', price: 40, gifts: ['Ramo de flores', 'Oso amoroso', 'Show del Patrón'], perks: ['oso', 'ramo'] },
       // El id duo-7 se mantiene para no romper carritos ya guardados
-      { id: 'duo-7', name: '8 canciones', note: 'Gratis a elegir: oso, ramo o Show del Patrón', price: 55, tag: 'Completo', gifts: ['Ramo de flores', 'Oso amoroso', 'Show del Patrón'] },
-      { id: 'duo-13', name: '13 canciones', note: 'Gratis a elegir: oso, ramo o Show del Patrón', price: 85, gifts: ['Ramo de flores', 'Oso amoroso', 'Show del Patrón'] },
+      { id: 'duo-7', name: '8 canciones', note: 'Gratis a elegir: oso, ramo o Show del Patrón', price: 55, tag: 'Completo', gifts: ['Ramo de flores', 'Oso amoroso', 'Show del Patrón'], perks: ['oso', 'ramo'] },
+      { id: 'duo-13', name: '13 canciones', note: 'Gratis a elegir: oso, ramo o Show del Patrón', price: 85, gifts: ['Ramo de flores', 'Oso amoroso', 'Show del Patrón'], perks: ['oso', 'ramo'] },
     ],
     addons: true,
     effect: 'hearts',
