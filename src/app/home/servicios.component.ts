@@ -26,6 +26,7 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
           <label class="sort" reveal="fade">
             <span>Ordenar por:</span>
             <select [value]="order()" (change)="sort($any($event.target).value)">
+              <option value="rec">Recomendado</option>
               <option value="asc">Precio (de menor a mayor)</option>
               <option value="desc">Precio (de mayor a menor)</option>
             </select>
@@ -200,7 +201,8 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
 })
 export class ServiciosComponent {
   readonly nav = inject(NavigationService);
-  readonly order = signal<'asc' | 'desc'>('asc');
+  /** "Recomendado" respeta el orden de la clienta: ... Grupos, Videollamadas y Misas al final. */
+  readonly order = signal<'rec' | 'asc' | 'desc'>('rec');
   readonly addons = ADDONS;
 
   /** Fotos de fondo de la tarjeta (sin el recorte del Patrón, que no sirve de fondo). */
@@ -217,12 +219,13 @@ export class ServiciosComponent {
   private readonly injector = inject(Injector);
 
   readonly sorted = computed(() => {
+    if (this.order() === 'rec') return SERVICES;
     const list = [...SERVICES].sort((a, b) => a.from - b.from);
     return this.order() === 'desc' ? list.reverse() : list;
   });
 
   /** Reordena las tarjetas: salen suavemente, cambian de orden y vuelven a entrar. */
-  sort(value: 'asc' | 'desc'): void {
+  sort(value: 'rec' | 'asc' | 'desc'): void {
     if (value === this.order()) return;
     const cards = this.host.querySelectorAll<HTMLElement>('.card');
     if (prefersReducedMotion() || document.hidden) {
