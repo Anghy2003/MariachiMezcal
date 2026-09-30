@@ -1,17 +1,15 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, afterNextRender, inject } from '@angular/core';
-import { gsap, prefersReducedMotion } from '../core/motion';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { NavigationService } from '../core/navigation.service';
 import { MagneticDirective, RevealDirective, TiltDirective } from '../core/directives';
 import { StarburstComponent } from '../shared/starburst.component';
 import { PapelPicadoComponent } from '../shared/papel-picado.component';
-import { SombreroArtComponent } from '../shared/sombrero-art.component';
 import { EffectCanvasComponent } from '../shared/effect-canvas.component';
 
 /** Promociones: solo regalos gratis (los adicionales con costo viven en cada ficha). */
 @Component({
   selector: 'app-promociones',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RevealDirective, TiltDirective, MagneticDirective, StarburstComponent, PapelPicadoComponent, SombreroArtComponent, EffectCanvasComponent],
+  imports: [RevealDirective, TiltDirective, MagneticDirective, StarburstComponent, PapelPicadoComponent, EffectCanvasComponent],
   template: `
     <section id="promociones" class="section section--tomato">
       <app-papel-picado class="picado" [count]="22" palette="light" />
@@ -25,9 +23,8 @@ import { EffectCanvasComponent } from '../shared/effect-canvas.component';
 
         <div class="cards" reveal="stagger">
           <article class="card" tilt="7">
-            <div class="art bear">
-              <span class="circle"></span>
-              <img src="img/oso.webp" alt="Oso amoroso vestido de charro" loading="lazy" />
+            <div class="art photo">
+              <img src="img/patron-7.webp" alt="Ositos y mariachis en un cumpleaños" loading="lazy" style="object-position: 50% 40%" />
             </div>
             <app-starburst class="free" text="¡Gratis!" [size]="84" />
             <h3>Oso amoroso</h3>
@@ -44,8 +41,8 @@ import { EffectCanvasComponent } from '../shared/effect-canvas.component';
           </article>
 
           <article class="card" tilt="7">
-            <div class="art sketch">
-              <app-sombrero-art />
+            <div class="art photo">
+              <img src="img/patron-1.webp" alt="El Patrón en una serenata de cumpleaños" loading="lazy" style="object-position: 50% 16%" />
             </div>
             <app-starburst class="free" text="¡Gratis!" [size]="84" />
             <h3>Show del Patrón</h3>
@@ -71,12 +68,8 @@ import { EffectCanvasComponent } from '../shared/effect-canvas.component';
     .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
     .card { position: relative; background: var(--cream); color: var(--ink); border-radius: 24px; padding: 20px 20px 28px; box-shadow: 0 0 0 1px rgba(30, 38, 32, 0.08), 0 30px 60px -34px rgba(0, 0, 0, 0.6); }
     .art { position: relative; height: 250px; border-radius: 18px; overflow: hidden; display: grid; place-items: center; background: var(--cream-2); }
-    .bear { overflow: visible; background: transparent; }
-    .bear .circle { position: absolute; width: 190px; aspect-ratio: 1; border-radius: 50%; background: var(--tomato); bottom: 12px; box-shadow: inset 0 -20px 40px rgba(0,0,0,0.2); }
-    .bear img { position: relative; height: 290px; width: auto; margin-top: -60px; filter: drop-shadow(0 20px 22px rgba(0, 0, 0, 0.35)); }
     .photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; transition: transform 1s var(--ease-out); }
     .card:hover .photo img { transform: scale(1.07); }
-    .sketch app-sombrero-art { width: 78%; height: 78%; }
     .free { position: absolute; top: 6px; right: 6px; z-index: 2; }
     h3 { margin: 24px 0 8px; font-family: var(--font-poster); font-weight: 400; font-size: 32px; letter-spacing: 0.04em; }
     .card p { margin: 0; font-size: 14.5px; color: var(--ink-muted); }
@@ -89,8 +82,6 @@ import { EffectCanvasComponent } from '../shared/effect-canvas.component';
     }
     @media (max-width: 560px) {
       .art { height: 220px; }
-      .bear img { height: 250px; }
-      .bear .circle { width: 160px; }
       h3 { font-size: 28px; }
       .banner { padding: 24px 22px; gap: 18px; }
       .banner .btn { width: 100%; }
@@ -99,16 +90,4 @@ import { EffectCanvasComponent } from '../shared/effect-canvas.component';
 })
 export class PromocionesComponent {
   readonly nav = inject(NavigationService);
-
-  constructor() {
-    const host = inject(ElementRef<HTMLElement>).nativeElement as HTMLElement;
-    let ctx: gsap.Context | undefined;
-    afterNextRender(() => {
-      if (prefersReducedMotion()) return;
-      ctx = gsap.context(() => {
-        gsap.to('.bear img', { y: -12, rotation: 2, duration: 2.6, yoyo: true, repeat: -1, ease: 'sine.inOut' });
-      }, host);
-    });
-    inject(DestroyRef).onDestroy(() => ctx?.revert());
-  }
 }
