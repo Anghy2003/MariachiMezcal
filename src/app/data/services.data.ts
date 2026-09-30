@@ -97,7 +97,7 @@ export const SERVICES: Service[] = [
     priceLabel: 'Desde $25',
     image: 'img/oso.webp',
     cutout: true,
-    gallery: ['img/oso.webp', 'img/patron-grupo.webp', 'img/real-cumple.webp', 'img/real-parque.webp', 'img/real-abuelita.webp'],
+    gallery: ['img/oso.webp', 'img/patron-grupo.webp', 'img/real-cumple.webp', 'img/real-parque.webp'],
     packages: [
       { id: 'patron-1', name: 'Patrón + serenata', note: '3 canciones · gratis oso amoroso o ramo', price: 25, gifts: ['Oso amoroso', 'Ramo de flores'] },
       { id: 'patron-2', name: 'Patrón + osito u osita', note: 'Incluye serenata de 3 canciones', price: 30 },
@@ -144,7 +144,7 @@ export const SERVICES: Service[] = [
     priceLabel: '$60',
     image: 'img/trio.webp',
     imagePosition: '50% 40%',
-    gallery: ['img/trio.webp', 'img/real-restaurante.webp', 'img/real-jardin.webp'],
+    gallery: ['img/trio.webp'],
     packages: [
       {
         id: 'trio-6',

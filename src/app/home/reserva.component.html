@@ -1,0 +1,134 @@
+<section id="reserva" class="checkout">
+  <form class="form" (submit)="submit($event)" novalidate>
+    <button type="button" class="back" (click)="nav.section('paquetes')"><app-icon name="arrow-left" /> Volver a los servicios</button>
+
+    <!-- Contacto -->
+    <h2>Contacto</h2>
+    <label class="field" [class.err]="showErr('email')" [class.filled]="email()">
+      <input type="email" [value]="email()" (input)="email.set(val($event))" autocomplete="email" placeholder=" " />
+      <span>Email</span>
+    </label>
+
+    <!-- Facturación -->
+    <h2>Facturación</h2>
+    <label class="field" [class.err]="showErr('nombre')" [class.filled]="nombre()">
+      <input type="text" [value]="nombre()" (input)="nombre.set(val($event))" autocomplete="name" placeholder=" " />
+      <span>Nombre completo</span>
+    </label>
+    <label class="field select filled">
+      <select [value]="pais()" (change)="pais.set(val($event))">
+        @for (p of paises; track p) {
+          <option [value]="p" [selected]="p === pais()">{{ p }}</option>
+        }
+      </select>
+      <span>País</span>
+      <app-icon name="arrow-right" class="chev" />
+    </label>
+    <div class="field phone" [class.err]="showErr('telefono')">
+      <select class="code" [value]="codigo()" (change)="codigo.set(val($event))" aria-label="Código de país">
+        @for (c of codigos; track c.code) {
+          <option [value]="c.code" [selected]="c.code === codigo()">{{ c.flag }} {{ c.code }}</option>
+        }
+      </select>
+      <input type="tel" [value]="telefono()" (input)="telefono.set(val($event))" autocomplete="tel-national" placeholder="Número de teléfono" aria-label="Número de teléfono" />
+    </div>
+
+    <!-- Evento -->
+    <h2>Evento</h2>
+    <div class="row">
+      <label class="field filled" [class.err]="showErr('fecha')">
+        <input type="date" [min]="today" [value]="fecha()" (input)="fecha.set(val($event))" />
+        <span>Fecha</span>
+      </label>
+      <label class="field filled" [class.err]="showErr('hora')">
+        <input type="time" [value]="hora()" (input)="hora.set(val($event))" />
+        <span>Hora</span>
+      </label>
+    </div>
+    <label class="field" [class.err]="showErr('direccion')" [class.filled]="direccion()">
+      <input type="text" [value]="direccion()" (input)="direccion.set(val($event))" autocomplete="street-address" placeholder=" " />
+      <span>Dirección y referencia</span>
+    </label>
+
+    <!-- Pago -->
+    <h2>Pago</h2>
+    <div class="pay">
+      <p class="pay__title"><span class="dot"></span> Depósito o transferencia bancaria</p>
+      <p>Te enviamos los datos de la cuenta por WhatsApp para confirmar tu reserva.</p>
+    </div>
+
+    <label class="terms" [class.err]="showErr('terminos')">
+      <input type="checkbox" [checked]="terminos()" (change)="terminos.set(!terminos())" />
+      <i><app-icon name="check" /></i>
+      <span>Estoy de acuerdo con los <button type="button" (click)="verTerminos.set(true)">términos de la reserva</button></span>
+    </label>
+
+    <button class="btn submit" type="submit" magnetic="0.12">Hacer mi reserva</button>
+  </form>
+
+  <!-- Resumen -->
+  <aside class="summary">
+    <ul class="items">
+      @for (d of items(); track d.item.key) {
+        <li>
+          <div class="thumb" [class.cutout]="d.service?.cutout">
+            <img [src]="d.service?.image" alt="" />
+            <span class="qty">1</span>
+          </div>
+          <div class="info">
+            <p class="name">{{ d.service?.name }}</p>
+            <p class="pkg">{{ d.pkg?.name }}</p>
+            @for (a of d.addons; track a.id) {
+              <p class="addon">+ {{ a.name }} · ${{ a.price }}</p>
+            }
+            @if (giftsOf(d.item).length) {
+              <select class="gift" [value]="regaloDe(d.item)" (change)="setRegalo(d.item, val($event))" aria-label="Regalo incluido">
+                @for (g of giftsOf(d.item); track g) {
+                  <option [value]="g" [selected]="g === regaloDe(d.item)">Regalo: {{ g }}</option>
+                }
+              </select>
+            }
+          </div>
+          <div class="side">
+            <p class="price">${{ d.total }}</p>
+            <button class="remove" (click)="cart.remove(d.item.key)" aria-label="Quitar"><app-icon name="close" /></button>
+          </div>
+        </li>
+      }
+    </ul>
+    <dl class="totals">
+      <div><dt>Subtotal</dt><dd>${{ total() }}</dd></div>
+      <div><dt>Movilización</dt><dd>Incluida en Cuenca</dd></div>
+      <div class="grand"><dt>Total</dt><dd>${{ total() }}</dd></div>
+    </dl>
+    <p class="fine">Cantones: el valor extra se cotiza según la distancia.</p>
+  </aside>
+</section>
+
+@if (verTerminos()) {
+  <div class="modal" role="dialog" aria-label="Términos de la reserva" (click)="verTerminos.set(false)">
+    <div class="modal__card" (click)="$event.stopPropagation()">
+      <h3>Términos de la reserva</h3>
+      <ul>
+        <li>La reserva se confirma por WhatsApp.</li>
+        <li>Reserva con tiempo y, de preferencia, con 30 minutos de margen antes de tu hora deseada.</li>
+        <li>Movilización incluida en zonas urbanas céntricas de Cuenca. Para cantones, el valor extra se cotiza según la distancia.</li>
+        <li>Los regalos incluidos dependen del paquete y de la promo del mes.</li>
+      </ul>
+      <button class="btn" (click)="terminos.set(true); verTerminos.set(false)">Entendido</button>
+    </div>
+  </div>
+}
+
+@if (sent()) {
+  <div class="success" role="dialog" aria-label="Reserva lista">
+    <app-effect-canvas #fx mode="confetti" [density]="1.2" />
+    <div class="success__card">
+      <span class="ok"><app-icon name="check" /></span>
+      <h3>¡Reserva lista, {{ firstName() }}!</h3>
+      <p>Envíanos el mensaje por WhatsApp y te confirmamos tu serenata.</p>
+      <a class="btn btn--whatsapp" [href]="waMessage()" target="_blank" rel="noopener"><app-icon name="whatsapp" /> Enviar por WhatsApp</a>
+      <button class="again" (click)="reset()">Volver</button>
+    </div>
+  </div>
+}
