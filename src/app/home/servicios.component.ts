@@ -40,7 +40,7 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
               <div class="flyer">
                 <!-- La foto ocupa toda la tarjeta; los recuadros van encima dejando verla entre ellos -->
                 <button class="bg" (click)="nav.service(s.slug)" [attr.aria-label]="s.name">
-                  <app-photo-cycle [images]="photos(s)" [position]="s.cutout ? '50% 15%' : (s.imagePosition ?? 'center')" [delay]="i * 700 + 400" />
+                  <app-photo-cycle [images]="photos(s)" [fitWide]="!!s.clientPhotos?.length" [position]="s.cutout ? '50% 15%' : (s.imagePosition ?? 'center')" [delay]="i * 700 + 400" />
                 </button>
                 <span class="title">{{ s.shortName }}</span>
 
@@ -49,6 +49,15 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
                     <button class="tile" [class.star]="p.tag" (click)="nav.service(s.slug, p.id)">
                       <span class="price">\${{ p.price }}</span>
                       <b>{{ p.name }}</b>
+                    @if (s.packages.length > 1 && p.gifts?.length) {
+                      <!-- Regalos a elegir gratis, en viñeta -->
+                      <span class="free">
+                        <em>Gratis</em>
+                        @for (g of p.gifts; track g) {
+                          <span>{{ g }}</span>
+                        }
+                      </span>
+                    }
                       @if (s.packages.length === 1) {
                         <small>{{ p.note }}</small>
                       }
@@ -142,6 +151,9 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
     .tile.star { border-color: var(--tomato-logo); }
     .price { font-family: var(--font-serif); font-size: 26px; line-height: 1; }
     .tile b { font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.35; }
+    .free { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; margin-top: 6px; font-size: 12px; line-height: 1.35; color: var(--cream-muted); }
+    .free em { margin-bottom: 3px; padding: 2px 9px; border-radius: 999px; background: var(--tomato); color: var(--cream); font-style: normal; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+    .free span::before { content: '– '; color: var(--tomato-logo); }
     .tile small { font-size: 12.5px; line-height: 1.45; color: var(--cream-muted); }
 
     /* Fotos de los regalos */
