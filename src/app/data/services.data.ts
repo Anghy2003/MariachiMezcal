@@ -70,7 +70,7 @@ export const SERVICES: Service[] = [
     priceLabel: '$25',
     image: 'img/solista.webp',
     imagePosition: '50% 30%',
-    gallery: ['img/solista.webp', 'img/solista-2.webp', 'img/hero-mezcal.webp'],
+    gallery: ['img/solista.webp', 'img/solista-3.webp', 'img/solista-4.webp', 'img/solista-5.webp', 'img/solista-6.webp', 'img/solista-2.webp'],
     packages: [
       {
         id: 'solista-3',
@@ -97,7 +97,7 @@ export const SERVICES: Service[] = [
     priceLabel: 'Desde $25',
     image: 'img/oso.webp',
     cutout: true,
-    gallery: ['img/oso.webp', 'img/patron-grupo.webp', 'img/real-cumple.webp'],
+    gallery: ['img/oso.webp', 'img/patron-grupo.webp', 'img/real-cumple.webp', 'img/real-parque.webp', 'img/real-abuelita.webp'],
     packages: [
       { id: 'patron-1', name: 'Patrón + serenata', note: '3 canciones · gratis oso amoroso o ramo', price: 25, gifts: ['Oso amoroso', 'Ramo de flores'] },
       { id: 'patron-2', name: 'Patrón + osito u osita', note: 'Incluye serenata de 3 canciones', price: 30 },
@@ -121,7 +121,7 @@ export const SERVICES: Service[] = [
     priceLabel: 'Desde $30',
     image: 'img/duo.webp',
     imagePosition: '50% 25%',
-    gallery: ['img/duo.webp', 'img/hero-duo.webp', 'img/duo-3.webp'],
+    gallery: ['img/duo.webp', 'img/hero-duo.webp', 'img/duo-3.webp', 'img/pareja-iglesia.webp'],
     packages: [
       { id: 'duo-4a', name: '4 canciones', note: 'Sin detalles ni obsequio', price: 30 },
       { id: 'duo-4b', name: '4 canciones', note: 'Incluye ramo u oso amoroso', price: 35, tag: 'Más elegido', gifts: ['Oso amoroso', 'Ramo de flores'] },
@@ -170,7 +170,7 @@ export const SERVICES: Service[] = [
     priceLabel: 'Desde $95',
     image: 'img/historia.webp',
     imagePosition: '50% 55%',
-    gallery: ['img/historia.webp', 'img/grupos-2.webp', 'img/grupo-centro.webp'],
+    gallery: ['img/historia.webp', 'img/grupos-2.webp', 'img/grupo-centro.webp', 'img/hero-fiesta.webp', 'img/grupos-3.webp'],
     packages: [
       { id: 'grupo-semi', name: 'Semicompleto', note: '6 mariachis · 7 canciones', price: 95 },
       { id: 'grupo-c1', name: 'Completo #1', note: '7 mariachis · 8 canciones', price: 125 },

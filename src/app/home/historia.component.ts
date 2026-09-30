@@ -33,7 +33,7 @@ import { CountUpDirective, RevealDirective, TiltDirective } from '../core/direct
           <ul class="stats" reveal="stagger">
             <li tilt="8">
               <b [countUp]="9"></b>
-              <div><p>Años en Cuenca</p><span>Trayectoria y confianza en cada celebración.</span></div>
+              <div><p>Años de experiencia</p><span>Trayectoria y confianza en Cuenca y sus cantones.</span></div>
             </li>
             <li tilt="8">
               <b [countUp]="1000" prefix="+"></b>

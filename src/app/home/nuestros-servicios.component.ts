@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { NavigationService } from '../core/navigation.service';
 import { MagneticDirective, RevealDirective, TiltDirective } from '../core/directives';
 import { StarburstComponent } from '../shared/starburst.component';
+import { PhotoCycleComponent } from '../shared/photo-cycle.component';
+import { SERVICES } from '../data/services.data';
 
 interface ServiceCard {
   slug: string;
@@ -21,7 +23,7 @@ interface ServiceCard {
 @Component({
   selector: 'app-nuestros-servicios',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RevealDirective, TiltDirective, MagneticDirective, StarburstComponent],
+  imports: [RevealDirective, TiltDirective, MagneticDirective, StarburstComponent, PhotoCycleComponent],
   template: `
     <section id="servicios" class="section section--green">
       <div class="container">
@@ -32,10 +34,10 @@ interface ServiceCard {
         </div>
 
         <div class="grid" reveal="stagger">
-          @for (c of cards; track c.slug) {
+          @for (c of cards; track c.slug; let i = $index) {
             <article class="card" [class.wide]="c.wide" tilt="5">
               <div class="media">
-                <img [src]="c.image" [style.object-position]="c.position" [alt]="c.title" loading="lazy" />
+                <app-photo-cycle [images]="photosFor(c)" [position]="c.position" [alt]="c.title" [delay]="i * 900" />
                 <span class="label">{{ c.label }}</span>
                 <app-starburst class="price" [small]="c.priceSmall ?? ''" [text]="c.price" [size]="82" />
               </div>
@@ -68,16 +70,14 @@ interface ServiceCard {
     .card.wide { grid-column: span 2; }
     .media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; }
     .card.wide .media { aspect-ratio: 8.2 / 3; }
-    .media img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease-out); }
-    .card:hover .media img { transform: scale(1.07); }
     .label {
-      position: absolute; top: 14px; left: 14px;
+      position: absolute; z-index: 3; top: 14px; left: 14px;
       background: var(--tomato); color: var(--cream);
       font-family: var(--font-poster); font-size: 13px; letter-spacing: 0.08em;
       padding: 4px 12px;
       clip-path: polygon(6% 0, 94% 0, 100% 50%, 94% 100%, 6% 100%, 0 50%);
     }
-    .price { position: absolute; right: 12px; bottom: -4px; }
+    .price { position: absolute; z-index: 3; right: 12px; bottom: -4px; }
     .body { flex: 1; display: flex; flex-direction: column; padding: 22px 24px 24px; }
     h3 { margin: 0; font-family: var(--font-poster); font-weight: 400; font-size: 27px; letter-spacing: 0.03em; line-height: 1.1; }
     .sub { margin: 4px 0 10px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--tomato-logo); }
@@ -102,6 +102,13 @@ interface ServiceCard {
 })
 export class NuestrosServiciosComponent {
   readonly nav = inject(NavigationService);
+
+  /** Fotos que se turnan en cada tarjeta: la del diseño primero y luego las demás de esa categoría. */
+  photosFor(c: ServiceCard): string[] {
+    const gallery = SERVICES.find((s) => s.slug === c.slug)?.gallery ?? [];
+    return [c.image, ...gallery.filter((g) => g !== c.image && !g.includes('oso'))];
+  }
+
   readonly cards: ServiceCard[] = [
     {
       slug: 'solista',

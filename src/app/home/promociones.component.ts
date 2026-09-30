@@ -74,7 +74,7 @@ import { EffectCanvasComponent } from '../shared/effect-canvas.component';
     .bear { overflow: visible; background: transparent; }
     .bear .circle { position: absolute; width: 190px; aspect-ratio: 1; border-radius: 50%; background: var(--tomato); bottom: 12px; box-shadow: inset 0 -20px 40px rgba(0,0,0,0.2); }
     .bear img { position: relative; height: 290px; width: auto; margin-top: -60px; filter: drop-shadow(0 20px 22px rgba(0, 0, 0, 0.35)); }
-    .photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; transition: transform 1s var(--ease-out); }
+    .photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; transition: transform 1s var(--ease-out); }
     .card:hover .photo img { transform: scale(1.07); }
     .sketch app-sombrero-art { width: 78%; height: 78%; }
     .free { position: absolute; top: 6px; right: 6px; z-index: 2; }

@@ -4,7 +4,6 @@ import { NavigationService } from '../core/navigation.service';
 import { SmoothScroll } from '../core/smooth-scroll.service';
 import { ScrollTrigger } from '../core/motion';
 import { HeroComponent } from './hero.component';
-import { EnVivoComponent } from './en-vivo.component';
 import { HistoriaComponent } from './historia.component';
 import { ServiciosComponent } from './servicios.component';
 import { NuestrosServiciosComponent } from './nuestros-servicios.component';
@@ -20,7 +19,6 @@ import { FaqComponent } from './faq.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     HeroComponent,
-    EnVivoComponent,
     HistoriaComponent,
     ServiciosComponent,
     NuestrosServiciosComponent,
@@ -37,7 +35,6 @@ import { FaqComponent } from './faq.component';
     <app-nuestros-servicios />
     <app-paquetes />
     <app-internacional />
-    <app-en-vivo />
     <app-promociones />
     <app-pasos />
     <app-contacto />

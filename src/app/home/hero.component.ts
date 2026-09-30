@@ -21,7 +21,7 @@ const SLIDE_MS = 7;
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [IconComponent, MagneticDirective, CountUpDirective],
   template: `
-    <section id="inicio" class="hero" aria-label="Portada">
+    <section id="inicio" class="hero" aria-label="Portada" (pointerdown)="swipeStart($event)" (pointerup)="swipeEnd($event)">
       <div class="media">
         @for (s of slides; track s.image; let i = $index) {
           <div class="frame" [attr.aria-hidden]="i !== current()">
@@ -83,6 +83,8 @@ export class HeroComponent {
   private progress?: gsap.core.Tween;
   private started = false;
   private inView = true;
+  private startX = 0;
+  private pan?: gsap.core.Tween;
 
   constructor() {
     effect(() => {
@@ -96,6 +98,7 @@ export class HeroComponent {
       this.split?.revert();
       this.slideTl?.kill();
       this.progress?.kill();
+      this.pan?.kill();
       document.removeEventListener('visibilitychange', this.onVisibility);
     });
   }
@@ -132,6 +135,7 @@ export class HeroComponent {
       gsap
         .timeline({ defaults: { ease: 'expo.out' } })
         .from(this.q('.frame img')[0], { scale: 1.35, duration: 2.6, ease: 'power2.out' }, 0)
+        .add(() => this.panMobile(0), 0)
         .fromTo(title, { x: dx, y: dy, scale, autoAlpha: 0, filter: 'blur(16px)' }, { autoAlpha: 1, filter: 'blur(0px)', duration: 0.6, ease: 'power2.out' }, 0.1)
         .fromTo(this.split.chars, { letterSpacing: '0.18em' }, { letterSpacing: '0em', duration: 1.8, ease: 'expo.inOut' }, 0.1)
         .to(title, { x: 0, y: 0, scale: 1, duration: 1.8, ease: 'expo.inOut' }, 0.6)
@@ -179,16 +183,42 @@ export class HeroComponent {
       return;
     }
     frames.forEach((f, i) => gsap.set(f, { zIndex: i === next ? 2 : i === prev ? 1 : 0 }));
+    const mobile = this.isMobile();
+    const dir = index > prev || (prev === n - 1 && next === 0) ? 1 : -1;
+    const hidden = mobile ? (dir > 0 ? 'inset(0% 0% 0% 100%)' : 'inset(0% 100% 0% 0%)') : 'inset(100% 0% 0% 0%)';
+    this.panMobile(next);
     this.slideTl = gsap
       .timeline()
-      .fromTo(frames[next], { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.4, ease: 'expo.inOut' }, 0)
+      .fromTo(frames[next], { clipPath: hidden }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.3, ease: 'expo.inOut' }, 0)
       .fromTo(frames[next].querySelector('img'), { scale: 1.3 }, { scale: 1.02, duration: SLIDE_MS + 1.4, ease: 'power1.out' }, 0)
-      .to(frames[prev].querySelector('img'), { scale: 1.12, yPercent: -6, duration: 1.4, ease: 'expo.inOut' }, 0)
+      .to(frames[prev].querySelector('img'), mobile ? { xPercent: -dir * 14, duration: 1.3, ease: 'expo.inOut' } : { scale: 1.12, yPercent: -6, duration: 1.4, ease: 'expo.inOut' }, 0)
       .set(frames[prev], { clipPath: 'inset(100% 0% 0% 0%)' }, 1.4)
-      .set(frames[prev].querySelector('img'), { yPercent: 0 }, 1.4)
+      .set(frames[prev].querySelector('img'), { yPercent: 0, xPercent: 0 }, 1.4)
       // Un destello recorre el título en cada cambio de foto
       .fromTo(this.split?.chars ?? [], { textShadow: '0 0 0 rgba(255,220,180,0)' }, { textShadow: '0 0 22px rgba(255,220,180,0.45)', duration: 0.4, yoyo: true, repeat: 1, stagger: 0.02 }, 0.7)
       .add(() => this.runProgress(), 1.2);
+  }
+
+  private isMobile(): boolean {
+    return window.innerWidth < 900;
+  }
+
+  /** En celular la foto se desliza de un borde al otro, para que se vea completa. */
+  private panMobile(index: number): void {
+    this.pan?.kill();
+    if (!this.isMobile() || prefersReducedMotion()) return;
+    const img = this.q('.frame img')[index];
+    const y = this.slides[index].position.split(' ')[1] ?? '50%';
+    this.pan = gsap.fromTo(img, { objectPosition: `0% ${y}` }, { objectPosition: `100% ${y}`, duration: SLIDE_MS + 1.6, ease: 'none' });
+  }
+
+  swipeStart(e: PointerEvent): void {
+    this.startX = e.clientX;
+  }
+
+  swipeEnd(e: PointerEvent): void {
+    const dx = e.clientX - this.startX;
+    if (Math.abs(dx) > 60 && this.isMobile()) this.go(this.current() + (dx < 0 ? 1 : -1));
   }
 
   private runProgress(): void {

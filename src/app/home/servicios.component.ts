@@ -1,16 +1,17 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Injector, afterNextRender, computed, inject, signal } from '@angular/core';
 import { SERVICES } from '../data/services.data';
 import { NavigationService } from '../core/navigation.service';
-import { Flip, prefersReducedMotion } from '../core/motion';
+import { gsap, prefersReducedMotion } from '../core/motion';
 import { RevealDirective, TiltDirective } from '../core/directives';
 import { StarburstComponent } from '../shared/starburst.component';
 import { IconComponent } from '../shared/icon.component';
+import { PhotoCycleComponent } from '../shared/photo-cycle.component';
 
 /** "Nuestros paquetes" según el Figma: tarjetas limpias que llevan directo a la ficha del servicio. */
 @Component({
   selector: 'app-paquetes',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RevealDirective, TiltDirective, StarburstComponent, IconComponent],
+  imports: [RevealDirective, TiltDirective, StarburstComponent, IconComponent, PhotoCycleComponent],
   template: `
     <section id="paquetes" class="section section--cream">
       <div class="container">
@@ -30,13 +31,17 @@ import { IconComponent } from '../shared/icon.component';
         </div>
 
         <div class="grid" reveal="stagger">
-          @for (s of sorted(); track s.slug) {
+          @for (s of sorted(); track s.slug; let i = $index) {
             <button class="card" tilt="8" (click)="nav.service(s.slug)" [attr.aria-label]="s.name">
               <div class="media" [class.cutout]="s.cutout">
                 @if (s.cutout) {
                   <span class="halo"></span>
                 }
-                <img [src]="s.image" [style.object-position]="s.imagePosition ?? 'center'" alt="" loading="lazy" />
+                @if (s.cutout) {
+                  <img [src]="s.image" alt="" loading="lazy" />
+                } @else {
+                  <app-photo-cycle [images]="s.gallery" [position]="s.imagePosition ?? 'center'" [delay]="i * 700 + 400" />
+                }
               </div>
               <app-starburst class="price" [small]="s.packages.length > 1 ? 'Desde' : ''" [text]="'$' + s.from" [size]="64" />
               <h3>{{ s.slug === 'solista' ? 'Mariachi solista' : s.shortName }}</h3>
@@ -127,14 +132,31 @@ export class ServiciosComponent {
     return this.order() === 'desc' ? list.reverse() : list;
   });
 
-  /** Reordena las tarjetas con una animación (cada tarjeta viaja a su nuevo lugar). */
+  /** Reordena las tarjetas: salen suavemente, cambian de orden y vuelven a entrar. */
   sort(value: 'asc' | 'desc'): void {
-    const state = prefersReducedMotion() ? null : Flip.getState(this.host.querySelectorAll('.card'));
-    this.order.set(value);
-    if (!state) return;
-    afterNextRender(
-      () => Flip.from(state, { targets: this.host.querySelectorAll('.card'), duration: 0.9, ease: 'expo.inOut', stagger: 0.04, absolute: true }),
-      { injector: this.injector },
-    );
+    if (value === this.order()) return;
+    const cards = this.host.querySelectorAll<HTMLElement>('.card');
+    if (prefersReducedMotion() || document.hidden) {
+      this.order.set(value);
+      return;
+    }
+    gsap.killTweensOf(cards);
+    gsap.to(cards, {
+      autoAlpha: 0,
+      y: 24,
+      duration: 0.3,
+      stagger: 0.03,
+      ease: 'power2.in',
+      onComplete: () => {
+        this.order.set(value);
+        afterNextRender(
+          () => {
+            const fresh = this.host.querySelectorAll<HTMLElement>('.card');
+            gsap.fromTo(fresh, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.06, ease: 'expo.out', clearProps: 'opacity,visibility' });
+          },
+          { injector: this.injector },
+        );
+      },
+    });
   }
 }
