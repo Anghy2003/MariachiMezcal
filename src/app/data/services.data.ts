@@ -113,7 +113,6 @@ export const SERVICES: Service[] = [
       'img/patron-5.webp',
       'img/patron-6.webp',
       'img/patron-7.webp',
-      'img/patron-grupo.webp',
       'img/real-cumple.webp',
     ],
     packages: [
