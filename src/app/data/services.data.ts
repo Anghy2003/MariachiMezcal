@@ -103,7 +103,7 @@ export const SERVICES: Service[] = [
     tagline: 'Show cómico + serenata',
     intro: 'Tú eliges: patrón o patrona, traje de mariachi o regional, para niños o para adultos.',
     description:
-      'Un show cómico con serenata de 3 canciones. Contamos con patrones varones y patronas mujeres, con traje de mariachi o traje regional, para celebraciones de niños y de adultos.',
+      'Show cómico con serenata de 3 canciones. Tú eliges la vestimenta, traje de mariachi o traje regional, y contamos con patrones varones y patronas mujeres para niños y adultos. Un detalle que recuerda que abrazar a los tuyos no necesita una fecha especial. Incluye transporte a la zona urbana céntrica; a las afueras el valor sube.',
     from: 25,
     priceLabel: 'Desde $25',
     image: 'img/oso.webp',
@@ -117,11 +117,10 @@ export const SERVICES: Service[] = [
       'img/patron-2.webp',
     ],
     packages: [
-      { id: 'patron-1', name: 'Patrón + serenata', note: '3 canciones · gratis oso amoroso o ramo', price: 25, gifts: ['Oso amoroso', 'Ramo de flores'], perks: ['oso', 'ramo'] },
+      { id: 'patron-1', name: 'Patrón + serenata', note: 'Show cómico + 3 canciones · gratis oso amoroso o ramo', price: 25, gifts: ['Oso amoroso', 'Ramo de flores'], perks: ['oso', 'ramo'] },
       { id: 'patron-2', name: 'Patrón + osito u osita', note: 'Incluye serenata de 3 canciones', price: 30, perks: ['oso'] },
       { id: 'patron-3', name: 'Patrón + osita + ramo', note: 'Incluye serenata de 3 canciones', price: 35, tag: 'Favorito', perks: ['oso', 'ramo'] },
-      { id: 'patron-4', name: 'Patrón + 1 mariachi extra + osita + ramo', note: 'Serenata de 4 canciones', price: 40, perks: ['oso', 'ramo'] },
-      { id: 'patron-5', name: 'Patrón + mariachi completo + ramo', note: 'La fiesta completa', price: 150, tag: 'Completo', perks: ['ramo'] },
+      { id: 'patron-4', name: 'Patrón + 1 mariachi extra + osita + ramo', note: 'Mariachi varón o mujer · serenata de 4 canciones', price: 40, perks: ['oso', 'ramo'] },
     ],
     addons: true,
     effect: 'confetti',

@@ -127,7 +127,7 @@ export class NuestrosServiciosComponent {
       price: '$25',
       title: 'Show del Patrón',
       subtitle: 'Show cómico teatralizado',
-      text: 'Personaje charro del patrón + serenata de 3 canciones. Bromas sanas, animación cómica y risas garantizadas.',
+      text: 'Patrón o patrona con traje de mariachi o regional, show cómico y serenata de 3 canciones. Para niños y adultos.',
       chip: 'Animación de risas',
       image: 'img/patron-3.webp',
       position: '50% 15%',
