@@ -70,6 +70,16 @@ import { IconComponent } from '../shared/icon.component';
       box-shadow: 0 1px 0 rgba(244, 238, 227, 0.08);
     }
     :host(.tucked) { transform: translateY(-100%); }
+    /* El desenfoque (backdrop-filter) hace que el menú "fixed" se mida contra la barra y no contra la pantalla:
+       con el menú abierto se quita y la barra queda sólida, así el menú cubre toda la pantalla */
+    :host(.menu-open) {
+      background: var(--green-900);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      transition: none;
+      /* Por encima del botón de WhatsApp (150) y por debajo del carrito (200) */
+      z-index: 160;
+    }
     .bar {
       width: auto;
       max-width: none;
@@ -136,7 +146,8 @@ import { IconComponent } from '../shared/icon.component';
       position: fixed; inset: var(--header-h) 0 0;
       background: var(--green-900);
       display: flex; flex-direction: column; justify-content: center; gap: 40px;
-      padding: 0 32px 80px;
+      padding: 24px 32px 80px;
+      overflow-y: auto;
       clip-path: inset(0 0 100% 0);
       transition: clip-path 0.7s var(--ease-out);
       pointer-events: none;
