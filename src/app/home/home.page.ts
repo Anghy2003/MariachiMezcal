@@ -8,7 +8,6 @@ import { HistoriaComponent } from './historia.component';
 import { ServiciosComponent } from './servicios.component';
 import { NuestrosServiciosComponent } from './nuestros-servicios.component';
 import { InternacionalComponent } from './internacional.component';
-import { PromocionesComponent } from './promociones.component';
 import { PasosComponent } from './pasos.component';
 import { ContactoComponent } from './contacto.component';
 import { MomentosComponent } from './momentos.component';
@@ -23,7 +22,6 @@ import { FaqComponent } from './faq.component';
     ServiciosComponent,
     NuestrosServiciosComponent,
     InternacionalComponent,
-    PromocionesComponent,
     PasosComponent,
     ContactoComponent,
     MomentosComponent,
@@ -35,7 +33,6 @@ import { FaqComponent } from './faq.component';
     <app-nuestros-servicios />
     <app-paquetes />
     <app-internacional />
-    <app-promociones />
     <app-pasos />
     <app-contacto />
     <app-momentos />

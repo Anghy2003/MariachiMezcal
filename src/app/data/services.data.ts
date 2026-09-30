@@ -36,6 +36,8 @@ export interface Service {
   /** La imagen es un recorte con fondo transparente (el oso). */
   cutout?: boolean;
   gallery: string[];
+  /** Fotos con clientes reales para la tarjeta de "Nuestros paquetes" (si no hay, se usa la galería). */
+  clientPhotos?: string[];
   packages: ServicePackage[];
   addons: boolean;
   effect: EffectMode;
@@ -77,6 +79,7 @@ export const SERVICES: Service[] = [
     priceLabel: '$25',
     image: 'img/solista.webp',
     imagePosition: '50% 30%',
+    clientPhotos: ['img/momento-4.webp', 'img/momento-3.webp'],
     gallery: ['img/solista.webp', 'img/solista-3.webp', 'img/solista-4.webp', 'img/solista-5.webp', 'img/solista-6.webp', 'img/solista-2.webp'],
     packages: [
       {
@@ -139,6 +142,7 @@ export const SERVICES: Service[] = [
     priceLabel: 'Desde $30',
     image: 'img/duo.webp',
     imagePosition: '50% 25%',
+    clientPhotos: ['img/momento-1.webp', 'img/momento-2.webp'],
     gallery: ['img/duo.webp', 'img/hero-duo.webp', 'img/duo-3.webp', 'img/pareja-iglesia.webp'],
     packages: [
       { id: 'duo-4a', name: '4 canciones', note: 'Sin detalles ni obsequio', price: 30 },

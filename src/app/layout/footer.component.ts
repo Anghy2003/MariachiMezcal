@@ -28,7 +28,6 @@ import { IconComponent } from '../shared/icon.component';
         <button (click)="nav.section('inicio')">Inicio</button>
         <button (click)="nav.section('historia')">Nuestra historia</button>
         <button (click)="nav.section('servicios')">Servicios</button>
-        <button (click)="nav.section('promociones')">Promociones</button>
         <button (click)="nav.section('reserva')">Reservas</button>
         <button (click)="nav.section('contacto')">Contáctanos</button>
       </div>
