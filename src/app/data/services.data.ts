@@ -132,7 +132,7 @@ export const SERVICES: Service[] = [
     shortName: 'Dúos',
     label: 'Más pedido',
     tagline: 'Dos voces que llegan al corazón',
-    intro: 'Varón y mujer, dos varones o dos mujeres. Todos los paquetes incluyen 1 canción de obsequio.',
+    intro: 'Varón y mujer, dos varones o dos mujeres.',
     description:
       'Una serenata a dúo: varón y mujer, dos varones o dos mujeres. Desde el paquete de $35 eliges gratis oso amoroso, ramo de flores o Show del Patrón.',
     from: 30,
