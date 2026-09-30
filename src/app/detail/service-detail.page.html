@@ -106,8 +106,8 @@
     <div class="more__grid" reveal="stagger">
       @for (o of suggestions(); track o.slug) {
         <button class="suggest" tilt="8" (click)="nav.service(o.slug)">
-          <div class="suggest__img" [class.cutout]="o.cutout">
-            <img [src]="o.image" [alt]="o.name" [style.object-position]="o.imagePosition ?? 'center'" loading="lazy" />
+          <div class="suggest__img">
+            <img [src]="suggestPhoto(o)" [alt]="o.name" [style.object-position]="o.cutout ? '50% 20%' : (o.imagePosition ?? 'center')" loading="lazy" />
           </div>
           <span class="suggest__label">{{ o.label }}</span>
           <b>{{ o.shortName }}</b>

@@ -14,7 +14,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ADDONS, INCLUDED, SERVICES, findService } from '../data/services.data';
+import { ADDONS, INCLUDED, SERVICES, Service, findService } from '../data/services.data';
 import { whatsappLink } from '../data/site.data';
 import { CartService } from '../core/cart.service';
 import { NavigationService } from '../core/navigation.service';
@@ -61,6 +61,10 @@ export class ServiceDetailPage {
     const others = SERVICES.filter((s) => s.slug !== this.service().slug);
     return others.slice(0, 4);
   });
+  /** Foto de la tarjeta sugerida: si la imagen principal es un recorte (el Patrón), se usa su primera foto real. */
+  suggestPhoto(o: Service): string {
+    return o.cutout ? (o.gallery.find((g) => g !== o.image) ?? o.image) : o.image;
+  }
   readonly waLink = computed(() => {
     const extras = Object.entries(this.extras())
       .map(([id, p]) => `${ADDONS.find((a) => a.id === id)?.name} ($${p})`)
