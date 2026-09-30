@@ -45,11 +45,23 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
                 <span class="title">{{ s.shortName }}</span>
 
                 <div class="tiles" [class.one]="s.packages.length === 1">
+                  @if (s.sharedGifts; as sg) {
+                    <!-- Una sola viñeta para los regalos que se repiten en los paquetes -->
+                    <div class="shared">
+                      <em>Gratis</em>
+                      <p>
+                        @for (g of sg.gifts; track g; let last = $last) {
+                          <span>{{ g }}</span>@if (!last) {<i> · </i>}
+                        }
+                      </p>
+                      <small>{{ sg.note }}</small>
+                    </div>
+                  }
                   @for (p of s.packages; track p.id) {
                     <button class="tile" [class.star]="p.tag" (click)="nav.service(s.slug, p.id)">
                       <span class="price">\${{ p.price }}</span>
                       <b>{{ p.name }}</b>
-                    @if (s.packages.length > 1 && p.gifts?.length) {
+                    @if (s.packages.length > 1 && p.gifts?.length && !s.sharedGifts) {
                       <!-- Regalos a elegir gratis, en viñeta -->
                       <span class="free">
                         <em>Gratis</em>
@@ -136,7 +148,7 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
 
     /* ---------- Recuadros de precio con doble filete ---------- */
     .tiles { position: relative; z-index: 2; margin-top: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 90px 16px 16px; pointer-events: none; }
-    .tiles:not(.one) .tile:last-child:nth-child(odd) { grid-column: 1 / -1; }
+    .tiles:not(.one) .tile:last-of-type:nth-of-type(odd) { grid-column: 1 / -1; }
     .tiles.one { grid-template-columns: 1fr; }
     .tile {
       position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
@@ -151,6 +163,11 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
     .tile.star { border-color: var(--tomato-logo); }
     .price { font-family: var(--font-serif); font-size: 26px; line-height: 1; }
     .tile b { font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.35; }
+    .shared { grid-column: 1 / -1; pointer-events: auto; padding: 12px 16px 13px; border-radius: 12px; background: rgba(163, 74, 44, 0.9); box-shadow: 0 12px 26px -16px rgba(0, 0, 0, 0.6); }
+    .shared em { display: inline-block; padding: 2px 10px; border-radius: 999px; background: var(--cream); color: var(--tomato); font-style: normal; font-size: 10.5px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+    .shared p { margin: 7px 0 2px; font-size: 13.5px; font-weight: 600; line-height: 1.4; color: var(--cream); }
+    .shared p i { font-style: normal; color: rgba(244, 238, 227, 0.6); }
+    .shared small { font-size: 11.5px; color: rgba(244, 238, 227, 0.8); }
     .free { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; margin-top: 6px; font-size: 12px; line-height: 1.35; color: var(--cream-muted); }
     .free em { margin-bottom: 3px; padding: 2px 9px; border-radius: 999px; background: var(--tomato); color: var(--cream); font-style: normal; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
     .free span::before { content: '– '; color: var(--tomato-logo); }
@@ -161,7 +178,7 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
     .perks img { height: 42px; width: auto; margin-left: -10px; filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.45)); transition: transform 0.5s var(--ease-out); }
     .perks img:nth-child(1) { rotate: -6deg; }
     .perks img:nth-child(2) { rotate: 5deg; }
-    .perks .cuy, .perks .patron { height: 50px; }
+    .perks .cuy, .perks .oso { height: 50px; }
     .tile:hover .perks img { transform: translateY(-4px) scale(1.06); }
 
     /* Un solo paquete: recuadro grande, texto a la izquierda y regalos a la derecha */
@@ -225,8 +242,8 @@ export class ServiciosComponent {
     return s.cutout ? s.gallery.filter((g) => g !== s.image) : s.gallery;
   }
   readonly perkImage: Record<Perk, string> = {
+    oso: 'img/oso.webp',
     ramo: 'img/regalos/ramo.webp',
-    patron: 'img/oso.webp',
     cuy: 'img/regalos/cuy.webp',
   };
   private readonly host = inject(ElementRef<HTMLElement>).nativeElement as HTMLElement;
