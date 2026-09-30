@@ -63,7 +63,9 @@ export class CartService {
     try {
       const raw = localStorage.getItem(this.storageKey);
       const parsed = raw ? (JSON.parse(raw) as CartItem[]) : [];
-      return parsed.filter((i) => findPackage(i.packageId));
+      // Paquetes renombrados: el carrito guardado pasa al id nuevo en vez de perderse
+      const renamed: Record<string, string> = { 'duo-12': 'duo-13' };
+      return parsed.map((i) => ({ ...i, packageId: renamed[i.packageId] ?? i.packageId })).filter((i) => findPackage(i.packageId));
     } catch {
       return [];
     }
