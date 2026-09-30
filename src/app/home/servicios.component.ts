@@ -225,7 +225,6 @@ export class ServiciosComponent {
     return s.cutout ? s.gallery.filter((g) => g !== s.image) : s.gallery;
   }
   readonly perkImage: Record<Perk, string> = {
-    oso: 'img/regalos/oso.webp',
     ramo: 'img/regalos/ramo.webp',
     patron: 'img/oso.webp',
     cuy: 'img/regalos/cuy.webp',

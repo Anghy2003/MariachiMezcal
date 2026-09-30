@@ -7,7 +7,7 @@
 export type EffectMode = 'spotlight' | 'hearts' | 'confetti' | 'notes' | 'picado' | 'candle' | 'sparkle';
 
 /** Regalo o detalle que se ve en la tarjeta del paquete (foto recortada en img/regalos). */
-export type Perk = 'oso' | 'ramo' | 'patron' | 'cuy';
+export type Perk = 'ramo' | 'patron' | 'cuy';
 
 export interface ServicePackage {
   id: string;
@@ -89,7 +89,7 @@ export const SERVICES: Service[] = [
         price: 25,
         tag: 'Oferta',
         gifts: ['Oso amoroso', 'Ramo de flores'],
-        perks: ['oso', 'ramo'],
+        perks: ['ramo'],
       },
     ],
     addons: true,
@@ -117,10 +117,10 @@ export const SERVICES: Service[] = [
       'img/patron-2.webp',
     ],
     packages: [
-      { id: 'patron-1', name: 'Patrón + serenata', note: 'Show cómico + 3 canciones · gratis oso amoroso o ramo', price: 25, gifts: ['Oso amoroso', 'Ramo de flores'], perks: ['oso', 'ramo'] },
-      { id: 'patron-2', name: 'Patrón + osito u osita', note: 'Incluye serenata de 3 canciones', price: 30, perks: ['oso'] },
-      { id: 'patron-3', name: 'Patrón + osita + ramo', note: 'Incluye serenata de 3 canciones', price: 35, tag: 'Favorito', perks: ['oso', 'ramo'] },
-      { id: 'patron-4', name: 'Patrón + 1 mariachi extra + osita + ramo', note: 'Mariachi varón o mujer · serenata de 4 canciones', price: 40, perks: ['oso', 'ramo'] },
+      { id: 'patron-1', name: 'Patrón + serenata', note: 'Show cómico + 3 canciones · gratis oso amoroso o ramo', price: 25, gifts: ['Oso amoroso', 'Ramo de flores'], perks: ['ramo'] },
+      { id: 'patron-2', name: 'Patrón + osito u osita', note: 'Incluye serenata de 3 canciones', price: 30 },
+      { id: 'patron-3', name: 'Patrón + osita + ramo', note: 'Incluye serenata de 3 canciones', price: 35, tag: 'Favorito', perks: ['ramo'] },
+      { id: 'patron-4', name: 'Patrón + 1 mariachi extra + osita + ramo', note: 'Mariachi varón o mujer · serenata de 4 canciones', price: 40, perks: ['ramo'] },
     ],
     addons: true,
     effect: 'confetti',
@@ -142,12 +142,12 @@ export const SERVICES: Service[] = [
     gallery: ['img/duo.webp', 'img/hero-duo.webp', 'img/duo-3.webp', 'img/pareja-iglesia.webp'],
     packages: [
       { id: 'duo-4a', name: '4 canciones', note: 'No incluye ramo ni osito', price: 30 },
-      { id: 'duo-4b', name: '4 canciones', note: 'Gratis a elegir: oso, ramo o Show del Patrón', price: 35, tag: 'Más elegido', gifts: ['Ramo de flores', 'Oso amoroso', 'Show del Patrón'], perks: ['oso', 'ramo'] },
-      { id: 'duo-5', name: '5 canciones', note: 'Gratis a elegir: oso, ramo o Show del Patrón', price: 37, gifts: ['Ramo de flores', 'Oso amoroso', 'Show del Patrón'], perks: ['oso', 'ramo'] },
-      { id: 'duo-6', name: '6 canciones', note: 'Gratis a elegir: oso, ramo o Show del Patrón', price: 40, gifts: ['Ramo de flores', 'Oso amoroso', 'Show del Patrón'], perks: ['oso', 'ramo'] },
+      { id: 'duo-4b', name: '4 canciones', note: 'Gratis a elegir: oso, ramo o Show del Patrón', price: 35, tag: 'Más elegido', gifts: ['Ramo de flores', 'Oso amoroso', 'Show del Patrón'], perks: ['ramo', 'patron'] },
+      { id: 'duo-5', name: '5 canciones', note: 'Gratis a elegir: oso, ramo o Show del Patrón', price: 37, gifts: ['Ramo de flores', 'Oso amoroso', 'Show del Patrón'], perks: ['ramo', 'patron'] },
+      { id: 'duo-6', name: '6 canciones', note: 'Gratis a elegir: oso, ramo o Show del Patrón', price: 40, gifts: ['Ramo de flores', 'Oso amoroso', 'Show del Patrón'], perks: ['ramo', 'patron'] },
       // El id duo-7 se mantiene para no romper carritos ya guardados
-      { id: 'duo-7', name: '8 canciones', note: 'Gratis a elegir: oso, ramo o Show del Patrón', price: 55, tag: 'Completo', gifts: ['Ramo de flores', 'Oso amoroso', 'Show del Patrón'], perks: ['oso', 'ramo'] },
-      { id: 'duo-13', name: '13 canciones', note: 'Gratis a elegir: oso, ramo o Show del Patrón', price: 85, gifts: ['Ramo de flores', 'Oso amoroso', 'Show del Patrón'], perks: ['oso', 'ramo'] },
+      { id: 'duo-7', name: '8 canciones', note: 'Gratis a elegir: oso, ramo o Show del Patrón', price: 55, tag: 'Completo', gifts: ['Ramo de flores', 'Oso amoroso', 'Show del Patrón'], perks: ['ramo', 'patron'] },
+      { id: 'duo-13', name: '13 canciones', note: 'Gratis a elegir: oso, ramo o Show del Patrón', price: 85, gifts: ['Ramo de flores', 'Oso amoroso', 'Show del Patrón'], perks: ['ramo', 'patron'] },
     ],
     addons: true,
     effect: 'hearts',
@@ -173,7 +173,7 @@ export const SERVICES: Service[] = [
         note: 'Con pista · gratis oso, ramo o Show del Patrón',
         price: 60,
         gifts: ['Oso amoroso', 'Ramo de flores', 'Show del Patrón'],
-        perks: ['oso', 'ramo', 'patron'],
+        perks: ['ramo', 'patron'],
       },
     ],
     addons: true,
@@ -203,7 +203,7 @@ export const SERVICES: Service[] = [
         price: 145,
         tag: 'Con regalo',
         gifts: ['Ramo de flores', 'Oso amoroso', 'Cuysito disfrazado'],
-        perks: ['ramo', 'oso', 'cuy'],
+        perks: ['ramo', 'cuy'],
       },
       { id: 'grupo-patron', name: 'Grupo completo + Show del Patrón', note: '8 mariachis · 7 canciones · patrón o patrona + ramo', price: 150, perks: ['patron', 'ramo'] },
     ],
