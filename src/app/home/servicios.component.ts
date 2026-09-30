@@ -206,9 +206,10 @@ export class ServiciosComponent {
   readonly order = signal<'rec' | 'asc' | 'desc'>('rec');
   readonly addons = ADDONS;
 
-  /** Fotos de fondo de la tarjeta: primero las de clientes reales; si no hay, la galería (sin el recorte del Patrón). */
+  /** Fotos de fondo de la tarjeta: primero la oficial del servicio y luego las de clientes reales;
+   *  si no hay de clientes, la galería (sin el recorte del Patrón). */
   photos(s: Service): string[] {
-    if (s.clientPhotos?.length) return s.clientPhotos;
+    if (s.clientPhotos?.length) return [s.image, ...s.clientPhotos];
     return s.cutout ? s.gallery.filter((g) => g !== s.image) : s.gallery;
   }
   readonly perkImage: Record<Perk, string> = {
