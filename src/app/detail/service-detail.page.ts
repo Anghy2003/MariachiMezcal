@@ -82,7 +82,9 @@ export class ServiceDetailPage {
       const s = this.service();
       untracked(() => {
         this.title.setTitle(`${s.name} · desde $${s.from} · Mariachi Mezcal`);
-        const featured = s.packages.find((p) => p.tag === 'Más elegido') ?? s.packages[0];
+        const pending = s.packages.find((p) => p.id === this.nav.pendingPackage());
+        this.nav.pendingPackage.set(null);
+        const featured = pending ?? s.packages.find((p) => p.tag === 'Más elegido') ?? s.packages[0];
         this.selectedId.set(featured.id);
         this.extras.set({});
         this.photo.set(s.image);

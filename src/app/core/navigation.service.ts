@@ -13,6 +13,8 @@ export class NavigationService {
   private readonly cart = inject(CartService);
   /** true cuando terminó la pantalla de bienvenida. */
   readonly introDone = signal(false);
+  /** Paquete elegido desde "Nuestros paquetes": la ficha lo deja marcado al abrirse. */
+  readonly pendingPackage = signal<string | null>(null);
 
   isHome(): boolean {
     return this.router.url.split('#')[0].split('?')[0] === '/';
@@ -35,7 +37,8 @@ export class NavigationService {
     }
   }
 
-  service(slug: string): void {
+  service(slug: string, packageId?: string): void {
+    this.pendingPackage.set(packageId ?? null);
     this.transition.go(`/servicios/${slug}`);
   }
 }
