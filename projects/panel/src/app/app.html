@@ -1,0 +1,118 @@
+<header class="top">
+  <div class="brand">
+    <img src="logo.webp" alt="" width="40" height="37" />
+    <div>
+      <b>Mariachi Mezcal</b>
+      <span>Panel de reservas</span>
+    </div>
+  </div>
+  <div class="top__actions">
+    <button class="ghost" (click)="cargar()" [disabled]="cargando()">Actualizar</button>
+    <button class="ghost" (click)="descargar()">Descargar Excel</button>
+  </div>
+</header>
+
+@if (sinAcceso()) {
+  <section class="aviso">
+    @if (api.esLocal) {
+      <h2>Clave de prueba</h2>
+      <p>En tu computadora, escribe la clave <code>DEV_ADMIN_TOKEN</code> del archivo <code>api/.dev.vars</code>.</p>
+      <form (submit)="entrarConClave($event, clave.value)">
+        <input #clave type="password" autocomplete="off" placeholder="Clave de desarrollo" />
+        <button class="primary" type="submit">Entrar</button>
+      </form>
+    } @else {
+      <h2>Tu sesión venció</h2>
+      <p>Recarga la página para volver a entrar con tu cuenta de Google.</p>
+      <button class="primary" (click)="location.reload()">Recargar</button>
+    }
+  </section>
+} @else {
+  <nav class="tabs" aria-label="Estado de las reservas">
+    @for (t of tabs; track t.id) {
+      <button [class.on]="tab() === t.id" (click)="tab.set(t.id)">
+        {{ t.label }} <span>{{ cuenta()[t.id] }}</span>
+      </button>
+    }
+  </nav>
+
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+
+  <main class="list">
+    @if (cargando() && !reservas().length) {
+      <p class="vacio">Cargando reservas…</p>
+    } @else if (!dias().length) {
+      <p class="vacio">No hay reservas {{ tab() === 'todas' ? '' : tab() + 's' }} por ahora.</p>
+    }
+
+    @for (d of dias(); track d.fecha) {
+      <section class="dia" [class.pasado]="d.pasado">
+        <h2>{{ d.titulo }} @if (d.pasado) { <small>ya pasó</small> }</h2>
+
+        @for (r of d.reservas; track r.id) {
+          <article class="card" [class]="'card s-' + r.status">
+            <div class="card__head">
+              <span class="hora">{{ r.hora }}</span>
+              <span class="code">{{ r.code }}</span>
+              <span class="chip">{{ r.status }}</span>
+              @if (r.abono) {
+                <span class="chip chip--abono">abono recibido</span>
+              }
+              <span class="total">${{ r.total }}</span>
+            </div>
+
+            @if (choques().get(r.id); as cerca) {
+              <p class="choque">
+                Cerca de otra reserva:
+                @for (o of cerca; track o.id) {
+                  <b>{{ o.code }} a las {{ o.hora }}</b>
+                }
+              </p>
+            }
+
+            <div class="cliente">
+              <b>{{ r.nombre }}</b>
+              <a [href]="whatsapp(r)" target="_blank" rel="noopener" class="wa">WhatsApp {{ r.telefono }}</a>
+              <a [href]="'mailto:' + r.email">{{ r.email }}</a>
+              <a [href]="mapa(r)" target="_blank" rel="noopener">{{ r.direccion }}</a>
+            </div>
+
+            <ul class="items">
+              @for (i of r.items; track $index) {
+                <li>
+                  <span><b>{{ i.servicio }}</b> · {{ i.paquete }}</span>
+                  <span>${{ i.subtotal }}</span>
+                  @if (i.regalo || i.adicionales.length) {
+                    <small>
+                      @if (i.regalo) { Regalo: {{ i.regalo }} }
+                      @for (a of i.adicionales; track a.id) { · + {{ a.nombre }} (${{ a.precio }}) }
+                    </small>
+                  }
+                </li>
+              }
+            </ul>
+
+            <textarea rows="2" placeholder="Notas internas (solo las ves tú)" [value]="r.notas" (blur)="guardarNotas(r, valor($event))"></textarea>
+
+            <div class="actions" [class.busy]="guardando() === r.id">
+              @if (r.status !== 'confirmada') {
+                <button class="primary" (click)="cambiarEstado(r, 'confirmada')">Confirmar</button>
+              }
+              @if (r.status !== 'cancelada') {
+                <button class="danger" (click)="cambiarEstado(r, 'cancelada')">Cancelar</button>
+              } @else {
+                <button class="ghost" (click)="cambiarEstado(r, 'pendiente')">Volver a pendiente</button>
+              }
+              @if (r.status !== 'cancelada') {
+                <button class="ghost" (click)="alternarAbono(r)">{{ r.abono ? 'Quitar abono' : 'Abono recibido' }}</button>
+              }
+            </div>
+            <p class="meta">Reservada el {{ creada(r) }} · {{ r.pais }}</p>
+          </article>
+        }
+      </section>
+    }
+  </main>
+}

@@ -4,9 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build mariachi-mezcal",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "build:panel": "ng build panel",
+    "start:panel": "ng serve panel --port 4301"
   },
   "private": true,
   "packageManager": "npm@11.12.1",
