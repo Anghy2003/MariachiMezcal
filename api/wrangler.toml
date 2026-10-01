@@ -1,0 +1,36 @@
+# Backend de reservas de Mariachi Mezcal (Cloudflare Worker + base de datos D1).
+# Probar en la computadora:  npm run db:migrate:local  y luego  npm run dev
+# Los secretos (claves) NO van aquí: en la computadora van en .dev.vars y en Cloudflare con `wrangler secret put`.
+
+name = "mezcal-api"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+
+[vars]
+ENVIRONMENT = "production"
+# Correo que recibe el aviso de cada reserva nueva
+OWNER_EMAIL = "jannethbridge@gmail.com"
+# Remitente de los correos (debe ser del dominio verificado en Resend)
+FROM_EMAIL = "Mariachi Mezcal <reservas@mariachimezcal.com>"
+# Dirección del panel, para el botón "Ver en el panel" del correo
+PANEL_URL = "https://panel.mariachimezcal.com"
+# Páginas que pueden enviar reservas (separadas por coma)
+ALLOWED_ORIGINS = "https://mariachimezcal.com,https://www.mariachimezcal.com"
+# Cuentas de Google que pueden usar el panel (separadas por coma)
+ADMIN_EMAILS = "jannethbridge@gmail.com"
+# Cloudflare Access: equipo y "audience" de la aplicación del panel (se completan al configurarlo)
+ACCESS_TEAM_DOMAIN = ""
+ACCESS_AUD = ""
+
+[[d1_databases]]
+binding = "DB"
+database_name = "mezcal"
+# Se reemplaza por el id real al crear la base con `wrangler d1 create mezcal`
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
+
+# Al publicar con el dominio propio, el backend responde en la misma dirección que la página y el panel:
+# routes = [
+#   { pattern = "mariachimezcal.com/api/*", zone_name = "mariachimezcal.com" },
+#   { pattern = "panel.mariachimezcal.com/api/*", zone_name = "mariachimezcal.com" },
+# ]

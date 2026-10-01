@@ -63,7 +63,10 @@
       <span>Estoy de acuerdo con los <button type="button" (click)="verTerminos.set(true)">términos de la reserva</button></span>
     </label>
 
-    <button class="btn submit" type="submit" magnetic="0.12">Hacer mi reserva</button>
+    <!-- Campo trampa: invisible para las personas, los robots lo llenan -->
+    <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" [value]="website()" (input)="website.set(val($event))" />
+
+    <button class="btn submit" type="submit" magnetic="0.12" [disabled]="sending()">{{ sending() ? 'Enviando…' : 'Hacer mi reserva' }}</button>
   </form>
 
   <!-- Resumen -->
@@ -121,14 +124,25 @@
 }
 
 @if (sent()) {
-  <div class="success" role="dialog" aria-label="Reserva lista">
-    <app-effect-canvas #fx mode="confetti" [density]="1.2" />
+  <div class="success" role="dialog" [attr.aria-label]="code() ? 'Reserva recibida' : 'Envía tu reserva por WhatsApp'">
+    @if (code()) {
+      <app-effect-canvas #fx mode="confetti" [density]="1.2" />
+    }
     <div class="success__card">
-      <span class="ok"><app-icon name="check" /></span>
-      <h3>¡Reserva lista, {{ firstName() }}!</h3>
-      <p>Envíanos el mensaje por WhatsApp y te confirmamos tu serenata.</p>
-      <a class="btn btn--whatsapp" [href]="waMessage()" target="_blank" rel="noopener"><app-icon name="whatsapp" /> Enviar por WhatsApp</a>
-      <button class="again" (click)="reset()">Volver</button>
+      @if (code()) {
+        <span class="ok"><app-icon name="check" /></span>
+        <h3>¡Reserva recibida, {{ firstName() }}!</h3>
+        <p class="code">{{ code() }}</p>
+        <p>Te llegó un correo con el detalle. Te escribiremos por WhatsApp para confirmar tu serenata.</p>
+        <a class="btn btn--ghost-wa" [href]="waMessage()" target="_blank" rel="noopener"><app-icon name="whatsapp" /> Escribir por WhatsApp</a>
+        <button class="again" (click)="reset()">Listo</button>
+      } @else {
+        <span class="ok ok--warn"><app-icon name="whatsapp" /></span>
+        <h3>{{ failure() === 'limit' ? 'Recibimos muchas solicitudes' : 'No pudimos registrar tu reserva en línea' }}</h3>
+        <p>Envíanos el mensaje por WhatsApp y te confirmamos tu serenata.</p>
+        <a class="btn btn--whatsapp" [href]="waMessage()" target="_blank" rel="noopener"><app-icon name="whatsapp" /> Enviar por WhatsApp</a>
+        <button class="again" (click)="reset()">Volver</button>
+      }
     </div>
   </div>
 }

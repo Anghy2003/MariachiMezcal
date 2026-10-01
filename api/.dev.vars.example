@@ -1,0 +1,6 @@
+# Copia este archivo como .dev.vars para probar el backend en tu computadora.
+# Modo prueba: los correos se muestran en la consola y el panel entra con DEV_ADMIN_TOKEN.
+ENVIRONMENT=development
+DEV_ADMIN_TOKEN=pon-aqui-una-clave-larga-de-prueba
+# Opcional: para enviar correos de verdad desde la computadora
+# RESEND_API_KEY=re_xxx

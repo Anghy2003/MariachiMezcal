@@ -1,0 +1,4 @@
+node_modules/
+.wrangler/
+# Secretos de la computadora (nunca se suben)
+.dev.vars
