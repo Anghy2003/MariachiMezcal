@@ -18,7 +18,7 @@ OWNER_EMAIL = "jannethbridge@gmail.com"
 # Remitente de los correos (debe ser del dominio verificado en Resend)
 FROM_EMAIL = "Mariachi Mezcal <reservas@mariachimezcal.com>"
 # Dirección del panel, para el botón "Ver en el panel" del correo
-PANEL_URL = "https://mezcal-panel.workers.dev"
+PANEL_URL = "https://mezcal-panel.mezcal-api.workers.dev"
 # Páginas que pueden enviar reservas desde otro origen (la página propia no lo necesita)
 ALLOWED_ORIGINS = ""
 # Cuentas de Google que pueden usar el panel (separadas por coma)
@@ -30,6 +30,6 @@ ACCESS_AUD = ""
 [[d1_databases]]
 binding = "DB"
 database_name = "mezcal"
-# Se reemplaza por el id real al crear la base con `wrangler d1 create mezcal`
-database_id = "00000000-0000-0000-0000-000000000000"
+# Base de datos real en Cloudflare (creada con `wrangler d1 create mezcal`)
+database_id = "29667b18-c218-430d-a42c-9a04331d2911"
 migrations_dir = "migrations"
