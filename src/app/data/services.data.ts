@@ -105,7 +105,6 @@ export const SERVICES: Service[] = [
       'img/solista-3.webp',
       'img/solista-5.webp',
       'img/solista-6.webp',
-      'img/solista-4.webp',
     ],
     packages: [
       {
