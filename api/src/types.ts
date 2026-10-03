@@ -15,6 +15,10 @@ export interface Env {
   RESEND_API_KEY?: string;
   /** Secreto: "sal" para cifrar la IP en el límite de reservas. */
   RATE_SALT?: string;
+  /** Secreto: llave JSON de la cuenta de servicio de Google (para crear eventos en el calendario). */
+  GOOGLE_SERVICE_ACCOUNT?: string;
+  /** Calendario donde se agendan las serenatas confirmadas (el correo de la dueña). */
+  CALENDAR_ID?: string;
   /** Solo en la computadora: clave para entrar al panel sin Cloudflare Access. */
   DEV_ADMIN_TOKEN?: string;
 }

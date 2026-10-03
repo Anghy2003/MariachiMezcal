@@ -29,6 +29,10 @@ export interface Reserva {
   total: number;
   abono: number;
   notas: string;
+  /** Evento creado automáticamente en Google Calendar (si está conectado). */
+  calendar_event_id: string | null;
+  /** Enlace manual "Agregar a Google Calendar". */
+  calendar_url: string;
 }
 
 /** La sesión venció o falta la clave de desarrollo. */

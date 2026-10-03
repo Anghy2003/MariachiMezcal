@@ -34,6 +34,8 @@ ALLOWED_ORIGINS = ""
 ADMIN_EMAILS = "jannethbridge@gmail.com"
 # Cloudflare Access: se completan al proteger el panel
 ACCESS_TEAM_DOMAIN = ""
+# Calendario donde se agendan las serenatas confirmadas (compartido con la cuenta de servicio)
+CALENDAR_ID = "jannethbridge@gmail.com"
 ACCESS_AUD = ""
 
 [[d1_databases]]

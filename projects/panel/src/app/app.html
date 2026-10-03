@@ -60,6 +60,9 @@
               @if (r.abono) {
                 <span class="chip chip--abono">abono recibido</span>
               }
+              @if (r.calendar_event_id) {
+                <span class="chip chip--cal">en tu Google Calendar</span>
+              }
               <span class="total">${{ r.total }}</span>
             </div>
 
@@ -107,6 +110,10 @@
               }
               @if (r.status !== 'cancelada') {
                 <button class="ghost" (click)="alternarAbono(r)">{{ r.abono ? 'Quitar abono' : 'Abono recibido' }}</button>
+              }
+              @if (r.status === 'confirmada' && !r.calendar_event_id) {
+                <!-- Respaldo: si el calendario automático no está conectado, se agrega con un toque -->
+                <a class="ghost btn-link" [href]="r.calendar_url" target="_blank" rel="noopener">Agregar a Google Calendar</a>
               }
             </div>
             <p class="meta">Reservada el {{ creada(r) }} · {{ r.pais }}</p>

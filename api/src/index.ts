@@ -2,6 +2,7 @@ import type { Env, Reserva, Status } from './types';
 import { validarReserva } from './validate';
 import { adminUser } from './auth';
 import { correoClienteCancelada, correoClienteConfirmada, correoClienteRecibida, correoDuena, sendEmail } from './email';
+import { actualizarEvento, borrarEvento, calendarioActivo, crearEvento, enlaceManual } from './calendar';
 
 /**
  * Backend de reservas de Mariachi Mezcal.
@@ -125,7 +126,7 @@ async function listar(url: URL, env: Env): Promise<Response> {
     ? env.DB.prepare('SELECT * FROM reservas WHERE status = ? ORDER BY fecha, hora').bind(status)
     : env.DB.prepare('SELECT * FROM reservas ORDER BY fecha, hora');
   const { results } = await stmt.all<Record<string, unknown>>();
-  return json({ reservas: results.map(fila) });
+  return json({ reservas: results.map(fila).map((r) => conCalendario(env, r)) });
 }
 
 async function actualizar(id: string, request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
@@ -147,7 +148,24 @@ async function actualizar(id: string, request: Request, env: Env, ctx: Execution
     const correo = status === 'confirmada' ? correoClienteConfirmada(despues) : correoClienteCancelada(despues);
     ctx.waitUntil(sendEmail(env, despues.email, correo.subject, correo.html, env.OWNER_EMAIL));
   }
-  return json({ reserva: despues });
+
+  // Google Calendar: confirmada → se crea (o se actualiza) el evento; si deja de estar confirmada → se borra
+  if (calendarioActivo(env)) {
+    if (status === 'confirmada' && !antes.calendar_event_id) {
+      const eventId = await crearEvento(env, despues);
+      if (eventId) {
+        await env.DB.prepare('UPDATE reservas SET calendar_event_id = ? WHERE id = ?').bind(eventId, id).run();
+        despues.calendar_event_id = eventId;
+      }
+    } else if (status === 'confirmada' && antes.calendar_event_id) {
+      ctx.waitUntil(actualizarEvento(env, antes.calendar_event_id, despues));
+    } else if (status !== 'confirmada' && antes.calendar_event_id) {
+      ctx.waitUntil(borrarEvento(env, antes.calendar_event_id));
+      await env.DB.prepare('UPDATE reservas SET calendar_event_id = NULL WHERE id = ?').bind(id).run();
+      despues.calendar_event_id = null;
+    }
+  }
+  return json({ reserva: conCalendario(env, despues) });
 }
 
 async function exportarCsv(env: Env): Promise<Response> {
@@ -166,6 +184,11 @@ async function exportarCsv(env: Env): Promise<Response> {
 }
 
 /* ---------- Utilidades ---------- */
+
+/** Agrega el enlace manual "Agregar a Google Calendar" (respaldo si el automático no está activo). */
+function conCalendario(env: Env, r: Reserva): Reserva & { calendar_url: string } {
+  return { ...r, calendar_url: enlaceManual(env, r) };
+}
 
 function fila(r: Record<string, unknown>): Reserva {
   return { ...(r as unknown as Reserva), items: JSON.parse(String(r.items ?? '[]')) };
