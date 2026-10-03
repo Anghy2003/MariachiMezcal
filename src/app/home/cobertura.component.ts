@@ -1,14 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RevealDirective } from '../core/directives';
 
-interface Zona {
-  nombre: string;
-  bandera: string;
-  /** Si no hay bandera propia publicada, se usa la de su provincia. */
-  provincia?: string;
-}
-
-/** Cobertura: zonas donde llevamos la serenata, cada una con su bandera. Va debajo de "Nuestra historia". */
+/** Cobertura: los cantones donde llevamos la serenata, entre dos banderas de Ecuador ondeando. Va debajo de "Nuestra historia". */
 @Component({
   selector: 'app-cobertura',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -20,34 +13,24 @@ interface Zona {
           <div class="head">
             <span class="flag" aria-hidden="true">
               @for (i of slices; track i) {
-                <i [style.--i]="i"></i>
+                <i [style.--i]="i" [style.--p]="i"></i>
               }
             </span>
-            <div>
+            <div class="centro">
               <h2>Cobertura</h2>
               <p>Cubrimos las siguientes zonas</p>
+              <ul class="zonas" reveal="stagger">
+                @for (z of zonas; track z) {
+                  <li>{{ z }}</li>
+                }
+              </ul>
             </div>
             <span class="flag flag--right" aria-hidden="true">
               @for (i of slices; track i) {
-                <i [style.--i]="i"></i>
+                <i [style.--i]="i" [style.--p]="slices.length - 1 - i"></i>
               }
             </span>
           </div>
-
-          <ul class="zonas" reveal="stagger">
-            @for (z of zonas; track z.nombre) {
-              <li [title]="z.provincia ? 'Bandera de la provincia de ' + z.provincia : 'Bandera de ' + z.nombre">
-                <img [src]="'img/banderas/' + z.bandera + '.webp'" [alt]="'Bandera de ' + (z.provincia ?? z.nombre)" loading="lazy" />
-                <span>{{ z.nombre }}</span>
-              </li>
-            }
-          </ul>
-
-          <p class="creditos">
-            Banderas:
-            <a href="https://commons.wikimedia.org/wiki/Category:Flags_of_cantons_of_Ecuador" target="_blank" rel="noopener">Wikimedia Commons</a>
-            · Paute, Gualaceo, Sígsig, Chordeleg y Nabón por Milenioscuro (CC BY 4.0) · Cañar por David C. S. (CC BY-SA 3.0) · demás de dominio público o CC0.
-          </p>
         </div>
       </div>
     </section>
@@ -55,95 +38,96 @@ interface Zona {
   styles: `
     .cobertura { padding-top: 0; }
     .card {
-      padding: clamp(28px, 4vw, 48px) clamp(18px, 4vw, 48px) 22px;
+      padding: clamp(32px, 4.5vw, 56px) clamp(18px, 4vw, 48px) clamp(30px, 4vw, 48px);
       border-radius: var(--radius-lg);
       background: #fff;
       box-shadow: 0 0 0 1px rgba(163, 74, 44, 0.25), 0 30px 60px -40px rgba(30, 38, 32, 0.5);
     }
-    .head { display: flex; align-items: center; justify-content: center; gap: clamp(14px, 3vw, 34px); text-align: center; margin-bottom: 30px; }
+    /* Banderas a los lados y, en medio, el título con los cantones */
+    .head { max-width: 1060px; margin: 0 auto; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: clamp(14px, 4vw, 56px); text-align: center; }
     h2 { margin: 0; font-family: var(--font-display); font-size: clamp(28px, 3.4vw, 44px); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); }
-    .head p { margin: 6px 0 0; font-family: var(--font-serif); font-style: italic; font-size: clamp(16px, 1.6vw, 20px); color: var(--tomato); }
+    .head p { margin: 6px 0 clamp(20px, 2.6vw, 30px); font-family: var(--font-serif); font-style: italic; font-size: clamp(16px, 1.6vw, 20px); color: var(--tomato); }
 
-    /* Bandera de Ecuador ondeando: tiras verticales que suben y bajan con un pequeño desfase */
+    /* Bandera de Ecuador ondeando: tiras verticales con una onda que nace en el asta y crece hacia la punta,
+       con luz y sombra que viajan junto con la onda. --p = distancia de la tira al asta. */
     .flag {
-      --w: clamp(72px, 9vw, 120px);
-      --n: 20;
+      --w: clamp(96px, 12vw, 170px);
+      --n: 72;
       position: relative;
       display: flex;
       width: var(--w);
       height: calc(var(--w) * 2 / 3);
+      margin-top: calc(var(--w) * 0.12);
       flex: none;
-      filter: drop-shadow(0 10px 12px rgba(30, 38, 32, 0.25));
+      filter: drop-shadow(0 12px 14px rgba(30, 38, 32, 0.28));
     }
     .flag::before {
       /* asta */
       content: '';
       position: absolute;
-      left: -7px;
-      top: -6px;
-      bottom: -26px;
-      width: 4px;
-      border-radius: 2px;
-      background: linear-gradient(90deg, #8a6a3a, #c9a46a, #8a6a3a);
+      left: -6px;
+      top: calc(var(--w) * -0.1);
+      bottom: calc(var(--w) * -0.42);
+      width: 5px;
+      border-radius: 3px;
+      background: linear-gradient(90deg, #6f5330, #d9b77c 45%, #7a5b34);
     }
-    .flag--right::before { left: auto; right: -7px; }
-    .flag--right { transform: scaleX(-1); }
+    .flag::after {
+      /* punta dorada del asta */
+      content: '';
+      position: absolute;
+      left: -9.5px;
+      top: calc(var(--w) * -0.1 - 10px);
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #fff3c9, #d7a943 45%, #8a6420);
+    }
+    .flag--right::before { left: auto; right: -6px; }
+    .flag--right::after { left: auto; right: -9.5px; }
     .flag i {
+      --amp: calc(var(--p) / var(--n) * var(--w) * 0.11);
       flex: 1;
       height: 100%;
+      margin-right: -0.5px; /* sin rayitas entre tiras */
       background: url(/img/banderas/ecuador.webp) no-repeat;
       background-size: var(--w) 100%;
       background-position: calc(var(--i) * var(--w) / var(--n) * -1) 0;
-      animation: ondear 2.2s ease-in-out infinite;
-      animation-delay: calc(var(--i) * -0.11s);
+      animation: ondear 1.25s ease-in-out infinite alternate;
+      animation-delay: calc(var(--p) * -0.035s);
     }
-    .flag--right i { transform-origin: center; }
     @keyframes ondear {
-      0%, 100% { transform: translateY(0); filter: brightness(1); }
-      50% { transform: translateY(calc(var(--w) * 0.06)); filter: brightness(0.86); }
+      from { transform: translateY(calc(var(--amp) * -1)) scaleY(1.02); filter: brightness(1.14) saturate(1.08); }
+      to { transform: translateY(var(--amp)) scaleY(0.98); filter: brightness(0.76); }
     }
 
-    .zonas { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
+    .zonas { list-style: none; margin: 0 auto; padding: 0; max-width: 760px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 12px; }
     .zonas li {
-      display: grid;
-      justify-items: center;
-      gap: 10px;
-      padding: 16px 8px 14px;
-      border-radius: 14px;
+      padding: 10px 20px;
+      border-radius: 999px;
       background: var(--cream);
-      text-align: center;
-      transition: transform 0.4s var(--ease-out), box-shadow 0.4s;
+      box-shadow: inset 0 0 0 1px rgba(163, 74, 44, 0.22);
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink);
+      transition: background 0.3s, color 0.3s;
     }
-    .zonas li:hover { transform: translateY(-4px); box-shadow: 0 14px 26px -18px rgba(30, 38, 32, 0.5); }
-    .zonas img { width: 72px; height: 48px; object-fit: cover; border-radius: 4px; box-shadow: 0 0 0 1px rgba(30, 38, 32, 0.12), 0 6px 12px -6px rgba(30, 38, 32, 0.45); }
-    .zonas span { font-weight: 700; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); line-height: 1.3; }
-    .creditos { margin: 22px 0 0; font-size: 11px; color: var(--ink-muted); text-align: center; opacity: 0.75; }
-    .creditos a { color: inherit; }
+    .zonas li:hover { background: var(--green-800); color: var(--cream); }
 
     @media (prefers-reduced-motion: reduce) { .flag i { animation: none; } }
-    @media (max-width: 1000px) { .zonas { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
     @media (max-width: 640px) {
-      .zonas { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-      .head { gap: 12px; }
-      .flag { --w: 58px; }
-      .flag::before { bottom: -16px; }
+      .head { gap: 10px; align-items: start; }
+      .head p { font-size: 15px; }
+      .flag { --w: 46px; margin-top: 24px; }
+      .flag::before { bottom: calc(var(--w) * -0.5); }
+      .zonas { gap: 7px; }
+      .zonas li { padding: 7px 11px; font-size: 10.5px; letter-spacing: 0.08em; }
     }
   `,
 })
 export class CoberturaComponent {
-  readonly slices = Array.from({ length: 20 }, (_, i) => i);
-  readonly zonas: Zona[] = [
-    { nombre: 'Cuenca', bandera: 'cuenca' },
-    { nombre: 'Azogues', bandera: 'azogues' },
-    { nombre: 'Paute', bandera: 'paute' },
-    { nombre: 'Gualaceo', bandera: 'gualaceo' },
-    { nombre: 'Cañar', bandera: 'canar' },
-    { nombre: 'Déleg', bandera: 'prov-canar', provincia: 'Cañar' },
-    { nombre: 'Sígsig', bandera: 'sigsig' },
-    { nombre: 'Tarqui', bandera: 'prov-azuay', provincia: 'Azuay' },
-    { nombre: 'Chordeleg', bandera: 'chordeleg' },
-    { nombre: 'Nabón', bandera: 'nabon' },
-    { nombre: 'Jima', bandera: 'prov-azuay', provincia: 'Azuay' },
-    { nombre: 'San José de Raranga', bandera: 'prov-azuay', provincia: 'Azuay' },
-  ];
+  readonly slices = Array.from({ length: 72 }, (_, i) => i);
+  readonly zonas = ['Cuenca', 'Azogues', 'Paute', 'Gualaceo', 'Cañar', 'Déleg', 'Sígsig', 'Tarqui', 'Chordeleg', 'Nabón', 'Jima', 'San José de Raranga'];
 }
