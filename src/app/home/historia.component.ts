@@ -14,10 +14,16 @@ import { CountUpDirective, RevealDirective, TiltDirective } from '../core/direct
           <div class="ornament"><span></span></div>
         </div>
 
-        <figure class="photo" reveal="clip">
-          <img src="img/misas.webp" alt="Mariachi Mezcal frente a la Catedral de Cuenca" loading="lazy" />
-          <figcaption>Merchán Maldonado S.A.S. · Cuenca</figcaption>
-        </figure>
+        <!-- Dos fotos juntas: el grupo y el grupo frente a la Catedral de Cuenca -->
+        <div class="photos">
+          <figure class="photo" reveal="clip">
+            <img src="img/historia.webp" alt="El grupo completo de Mariachi Mezcal frente a una casa colonial" loading="lazy" />
+            <figcaption>Merchán Maldonado S.A.S. · Cuenca</figcaption>
+          </figure>
+          <figure class="photo photo--catedral" reveal="clip">
+            <img src="img/misas.webp" alt="Mariachi Mezcal frente a la Catedral de Cuenca" loading="lazy" />
+          </figure>
+        </div>
 
         <div class="grid">
           <div class="text">
@@ -49,8 +55,10 @@ import { CountUpDirective, RevealDirective, TiltDirective } from '../core/direct
     </section>
   `,
   styles: `
-    .photo { position: relative; margin: 0; border-radius: var(--radius-lg); overflow: hidden; aspect-ratio: 16 / 7.5; box-shadow: 0 0 0 1px rgba(163, 74, 44, 0.5), 0 40px 80px -40px rgba(30, 38, 32, 0.6); }
-    .photo img { width: 100%; height: 125%; object-fit: cover; object-position: 50% 80%; }
+    .photos { display: grid; grid-template-columns: 1.75fr 1fr; gap: 18px; height: clamp(320px, 36vw, 520px); }
+    .photo { position: relative; margin: 0; border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 0 0 1px rgba(163, 74, 44, 0.5), 0 40px 80px -40px rgba(30, 38, 32, 0.6); }
+    .photo img { width: 100%; height: 125%; object-fit: cover; object-position: 50% 60%; }
+    .photo--catedral img { object-position: 50% 85%; }
     figcaption { position: absolute; right: 20px; bottom: 18px; background: var(--green-800); color: var(--cream); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; padding: 10px 16px; border-radius: 999px; }
     .grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: clamp(32px, 6vw, 90px); margin-top: 64px; align-items: start; }
     h3 { font-family: var(--font-display); font-size: clamp(22px, 2.2vw, 30px); letter-spacing: 0.03em; line-height: 1.2; margin: 0 0 22px; text-transform: uppercase; }
@@ -66,6 +74,7 @@ import { CountUpDirective, RevealDirective, TiltDirective } from '../core/direct
     .stats span { font-size: 13.5px; color: var(--ink-muted); }
     @media (max-width: 900px) {
       .grid { grid-template-columns: 1fr; }
+      .photos { grid-template-columns: 1fr; height: auto; }
       .photo { aspect-ratio: 4 / 3; }
     }
     @media (max-width: 560px) {
