@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { SITE, whatsappLink } from '../data/site.data';
 import { SERVICES } from '../data/services.data';
 import { NavigationService } from '../core/navigation.service';
-import { PageTransition } from '../core/page-transition.service';
 import { IconComponent } from '../shared/icon.component';
 
 @Component({
@@ -47,7 +46,6 @@ import { IconComponent } from '../shared/icon.component';
     </div>
     <div class="container bottom">
       <p>© {{ site.year }} {{ site.company }} — Todos los derechos reservados.</p>
-      <button class="access" (click)="transition.go('/acceso')"><app-icon name="lock" /> Acceso interno</button>
     </div>
   `,
   styles: `
@@ -71,8 +69,6 @@ import { IconComponent } from '../shared/icon.component';
     .social a:hover { background: var(--tomato); transform: translateY(-4px); color: var(--cream); }
     .bottom { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-top: 24px; border-top: 1px solid rgba(244, 238, 227, 0.08); font-size: 13px; color: rgba(244, 238, 227, 0.5); }
     .bottom p { margin: 0; }
-    .access { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(244, 238, 227, 0.55); }
-    .access:hover { color: var(--cream); }
     @media (max-width: 900px) {
       .grid { grid-template-columns: 1fr 1fr; }
       .about { grid-column: 1 / -1; }
@@ -87,6 +83,5 @@ export class FooterComponent {
   readonly site = SITE;
   readonly services = SERVICES;
   readonly nav = inject(NavigationService);
-  readonly transition = inject(PageTransition);
   readonly wa = whatsappLink('¡Hola Mariachi Mezcal! Quiero información sobre sus serenatas.');
 }

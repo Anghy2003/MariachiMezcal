@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, ElementRef, computed, effect, injec
 import { CartService } from '../core/cart.service';
 import { NavigationService } from '../core/navigation.service';
 import { SmoothScroll } from '../core/smooth-scroll.service';
-import { PageTransition } from '../core/page-transition.service';
 import { gsap } from '../core/motion';
 import { MagneticDirective } from '../core/directives';
 import { IconComponent } from '../shared/icon.component';
@@ -36,9 +35,6 @@ import { IconComponent } from '../shared/icon.component';
             <span class="badge">{{ cart.count() }}</span>
           }
         </button>
-        <button class="access" (click)="transition.go('/acceso')">
-          <app-icon name="lock" /> Acceso interno
-        </button>
         <button class="btn btn--sm" magnetic="0.25" (click)="go('reserva')">Reservar</button>
         <button class="burger" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen()" aria-label="Menú">
           <span></span><span></span>
@@ -52,9 +48,6 @@ import { IconComponent } from '../shared/icon.component';
           <button (click)="go(link.id)">{{ link.label }}</button>
         }
       </nav>
-      <button class="access access--mobile" (click)="transition.go('/acceso'); menuOpen.set(false)">
-        <app-icon name="lock" /> Acceso interno
-      </button>
     </div>
   `,
   styles: `
@@ -127,15 +120,6 @@ import { IconComponent } from '../shared/icon.component';
       border-radius: 9px; background: var(--tomato-logo);
       font-size: 11px; font-weight: 700; display: grid; place-items: center;
     }
-    .access {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 11.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
-      padding: 9px 14px; border-radius: 999px; white-space: nowrap;
-      box-shadow: inset 0 0 0 1px rgba(244, 238, 227, 0.3);
-      color: var(--cream-muted);
-      transition: color 0.3s, box-shadow 0.3s;
-    }
-    .access:hover { color: var(--cream); box-shadow: inset 0 0 0 1px var(--cream); }
     .burger { display: none; width: 42px; height: 42px; position: relative; }
     .burger span { position: absolute; left: 10px; right: 10px; height: 1.5px; background: var(--cream); transition: transform 0.4s var(--ease-out); }
     .burger span:first-child { top: 16px; }
@@ -155,10 +139,9 @@ import { IconComponent } from '../shared/icon.component';
     :host(.menu-open) .mobile { clip-path: inset(0 0 0 0); pointer-events: auto; }
     .mobile nav { display: flex; flex-direction: column; gap: 10px; }
     .mobile nav button { text-align: left; font-family: var(--font-display); font-size: 34px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
-    .access--mobile { align-self: flex-start; }
     @media (min-width: 1081px) and (max-width: 1320px) { .brand span { display: none; } }
     @media (max-width: 1080px) {
-      .links, .access:not(.access--mobile) { display: none; }
+      .links { display: none; }
       .actions { margin-left: auto; }
       .burger { display: block; }
     }
@@ -171,7 +154,6 @@ import { IconComponent } from '../shared/icon.component';
 })
 export class HeaderComponent {
   readonly cart = inject(CartService);
-  readonly transition = inject(PageTransition);
   private readonly nav = inject(NavigationService);
   private readonly scroll = inject(SmoothScroll);
   private readonly host = inject(ElementRef<HTMLElement>).nativeElement as HTMLElement;

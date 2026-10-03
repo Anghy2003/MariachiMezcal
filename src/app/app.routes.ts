@@ -13,10 +13,5 @@ export const routes: Routes = [
     loadComponent: () => import('./reservar/reservar.page').then((m) => m.ReservarPage),
     title: 'Reserva tu serenata · Mariachi Mezcal',
   },
-  {
-    path: 'acceso',
-    loadComponent: () => import('./acceso/acceso.page').then((m) => m.AccesoPage),
-    title: 'Acceso interno · Mariachi Mezcal',
-  },
   { path: '**', redirectTo: '' },
 ];

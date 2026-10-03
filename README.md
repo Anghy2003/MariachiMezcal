@@ -27,7 +27,6 @@ Abre http://localhost:4200. Para la versión de producción: `npm run build` (qu
 | Momentos reales | Carrusel de 12 elementos (fotos + espacios para video), avanza solo y se puede deslizar. |
 | Preguntas frecuentes | Solo las 4 preguntas reales de la clienta. |
 | Fichas de servicio (6) | `/servicios/solista`, `show-del-patron`, `duos`, `trio`, `grupos`, `misas`. Cada una con su efecto propio: haz de luz (Solista), confeti (Patrón), destellos entrelazados (Dúos), notas musicales (Trío), papel picado (Grupos) y luz de vela (Misas). |
-| Acceso interno | Solo el botón y una pantalla "próximamente". El panel real es una aplicación aparte (ver "Sistema de reservas"). |
 
 Extras en todo el sitio: pantalla de bienvenida con el logo, botones magnéticos, cortina entre páginas, carrito lateral (se guarda en el navegador), botón flotante de WhatsApp. Si la persona pidió "reducir movimiento" en su sistema, las animaciones se desactivan.
 
