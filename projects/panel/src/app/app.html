@@ -1,125 +1,250 @@
-<header class="top">
-  <div class="brand">
-    <img src="logo.webp" alt="" width="40" height="37" />
-    <div>
-      <b>Mariachi Mezcal</b>
-      <span>Panel de reservas</span>
+<div class="layout">
+  <!-- Barra lateral: marca, filtros y acciones -->
+  <aside class="side">
+    <div class="brand">
+      <img src="logo.webp" alt="" width="64" height="59" />
+      <div>
+        <b>Mariachi Mezcal</b>
+        <span>Panel de reservas</span>
+      </div>
     </div>
-  </div>
-  <div class="top__actions">
-    <button class="ghost" (click)="cargar()" [disabled]="cargando()">Actualizar</button>
-    <button class="ghost" (click)="descargar()">Descargar Excel</button>
-  </div>
-</header>
 
-@if (sinAcceso()) {
-  <section class="aviso">
-    @if (api.esLocal) {
-      <h2>Clave de prueba</h2>
-      <p>En tu computadora, escribe la clave <code>DEV_ADMIN_TOKEN</code> del archivo <code>api/.dev.vars</code>.</p>
-      <form (submit)="entrarConClave($event, clave.value)">
-        <input #clave type="password" autocomplete="off" placeholder="Clave de desarrollo" />
-        <button class="primary" type="submit">Entrar</button>
-      </form>
+    <button class="side__toggle" (click)="filtrosAbiertos.set(!filtrosAbiertos())" [attr.aria-expanded]="filtrosAbiertos()">
+      Filtros {{ filtrosAbiertos() ? '▴' : '▾' }}
+    </button>
+
+    <div class="filters" [class.open]="filtrosAbiertos()">
+      <div class="filter">
+        <h3>Año</h3>
+        <button [class.on]="anio() === null" (click)="anio.set(null)">Todos</button>
+        @for (a of anios(); track a) {
+          <button [class.on]="anio() === a" (click)="anio.set(a)">{{ a }}</button>
+        }
+      </div>
+      <div class="filter">
+        <h3>Servicio</h3>
+        <button [class.on]="!servicio()" (click)="servicio.set('')">Todos</button>
+        @for (s of servicios(); track s) {
+          <button [class.on]="servicio() === s" (click)="servicio.set(s)">{{ s }}</button>
+        }
+      </div>
+    </div>
+
+    <div class="side__actions">
+      <button (click)="cargar()" [disabled]="cargando()">Actualizar</button>
+      <button (click)="descargar()">Descargar Excel</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    @if (sinAcceso()) {
+      <section class="aviso">
+        @if (api.esLocal) {
+          <h2>Clave de prueba</h2>
+          <p>En tu computadora, escribe la clave <code>DEV_ADMIN_TOKEN</code> del archivo <code>api/.dev.vars</code>.</p>
+          <form (submit)="entrarConClave($event, clave.value)">
+            <input #clave type="password" autocomplete="off" placeholder="Clave de desarrollo" />
+            <button class="primary" type="submit">Entrar</button>
+          </form>
+        } @else {
+          <h2>Tu sesión venció</h2>
+          <p>Recarga la página para volver a entrar con tu cuenta de Google.</p>
+          <button class="primary" (click)="location.reload()">Recargar</button>
+        }
+      </section>
     } @else {
-      <h2>Tu sesión venció</h2>
-      <p>Recarga la página para volver a entrar con tu cuenta de Google.</p>
-      <button class="primary" (click)="location.reload()">Recargar</button>
-    }
-  </section>
-} @else {
-  <nav class="tabs" aria-label="Estado de las reservas">
-    @for (t of tabs; track t.id) {
-      <button [class.on]="tab() === t.id" (click)="tab.set(t.id)">
-        {{ t.label }} <span>{{ cuenta()[t.id] }}</span>
-      </button>
-    }
-  </nav>
+      @if (error()) {
+        <p class="error">{{ error() }}</p>
+      }
 
-  @if (error()) {
-    <p class="error">{{ error() }}</p>
-  }
+      <!-- Cifras clave -->
+      <section class="kpis">
+        <div class="kpi">
+          <b>{{ dinero(kpis().ingresos) }}</b>
+          <span>Ingresos confirmados</span>
+        </div>
+        <div class="kpi">
+          <b>{{ dinero(kpis().porCobrar) }}</b>
+          <span>Por confirmar</span>
+        </div>
+        <div class="kpi">
+          <b>{{ kpis().reservas }}</b>
+          <span>Reservas</span>
+          @if (kpis().confirmadas) {
+            <em class="badge">{{ kpis().abonos }}/{{ kpis().confirmadas }} con abono</em>
+          }
+        </div>
+        <div class="kpi" [class.alerta]="kpis().pendientes">
+          <b>{{ kpis().pendientes }}</b>
+          <span>Pendientes</span>
+        </div>
+        <div class="kpi">
+          <b>{{ dinero(kpis().ticket) }}</b>
+          <span>Ticket promedio</span>
+        </div>
+      </section>
 
-  <main class="list">
-    @if (cargando() && !reservas().length) {
-      <p class="vacio">Cargando reservas…</p>
-    } @else if (!dias().length) {
-      <p class="vacio">No hay reservas {{ tab() === 'todas' ? '' : tab() + 's' }} por ahora.</p>
-    }
-
-    @for (d of dias(); track d.fecha) {
-      <section class="dia" [class.pasado]="d.pasado">
-        <h2>{{ d.titulo }} @if (d.pasado) { <small>ya pasó</small> }</h2>
-
-        @for (r of d.reservas; track r.id) {
-          <article class="card" [class]="'card s-' + r.status">
-            <div class="card__head">
-              <span class="hora">{{ r.hora }}</span>
-              <span class="code">{{ r.code }}</span>
-              <span class="chip">{{ r.status }}</span>
-              @if (r.abono) {
-                <span class="chip chip--abono">abono recibido</span>
-              }
-              @if (r.calendar_event_id) {
-                <span class="chip chip--cal">en tu Google Calendar</span>
-              }
-              <span class="total">${{ r.total }}</span>
-            </div>
-
-            @if (choques().get(r.id); as cerca) {
-              <p class="choque">
-                Cerca de otra reserva:
-                @for (o of cerca; track o.id) {
-                  <b>{{ o.code }} a las {{ o.hora }}</b>
+      <!-- Gráficos por mes -->
+      <section class="row two">
+        @for (g of [{ t: 'Reservas por mes', d: porMes().reservas }, { t: 'Ingresos por mes', d: porMes().ingresos }]; track g.t) {
+          <div class="panel">
+            <h2>{{ g.t }}</h2>
+            <svg [attr.viewBox]="'0 0 ' + lw + ' ' + lh" class="line" role="img" [attr.aria-label]="g.t">
+              <line [attr.x1]="0" [attr.x2]="lw" [attr.y1]="g.d.base" [attr.y2]="g.d.base" class="axis" />
+              <path [attr.d]="g.d.area" class="area" />
+              <path [attr.d]="g.d.path" class="stroke" />
+              @for (p of g.d.puntos; track $index) {
+                <circle [attr.cx]="p.x" [attr.cy]="p.y" r="4" />
+                @if (p.v) {
+                  <text [attr.x]="p.x" [attr.y]="p.y - 11" class="val">{{ p.label }}</text>
                 }
-              </p>
+                <text [attr.x]="p.x" [attr.y]="lh - 8" class="mes">{{ meses[$index] }}</text>
+              }
+            </svg>
+            @if (g.d.vacio) {
+              <p class="nodata">Aún no hay datos en este periodo.</p>
             }
+          </div>
+        }
+      </section>
 
-            <div class="cliente">
-              <b>{{ r.nombre }}</b>
-              <a [href]="whatsapp(r)" target="_blank" rel="noopener" class="wa">WhatsApp {{ r.telefono }}</a>
-              <a [href]="'mailto:' + r.email">{{ r.email }}</a>
-              <a [href]="mapa(r)" target="_blank" rel="noopener">{{ r.direccion }}</a>
-            </div>
+      <!-- Rankings -->
+      <section class="row three">
+        <div class="panel">
+          <h2>Paquetes más pedidos</h2>
+          <ul class="hbars">
+            @for (b of topPaquetes(); track b.label) {
+              <li>
+                <span class="lbl" [title]="b.label">{{ b.label }}</span>
+                <span class="bar"><i [style.width.%]="b.pct"></i><em>{{ b.texto }}</em></span>
+              </li>
+            } @empty {
+              <p class="nodata">Aún no hay datos.</p>
+            }
+          </ul>
+        </div>
+        <div class="panel">
+          <h2>Ingresos por servicio</h2>
+          <div class="vbars">
+            @for (b of porServicio(); track b.label) {
+              <div class="col">
+                <em>{{ b.texto }}</em>
+                <i [style.height.%]="b.pct"></i>
+                <span [title]="b.label">{{ b.label }}</span>
+              </div>
+            } @empty {
+              <p class="nodata">Aún no hay datos.</p>
+            }
+          </div>
+        </div>
+        <div class="panel">
+          <h2>Reservas por estado</h2>
+          <div class="vbars estados">
+            @for (b of porEstado(); track b.label) {
+              <div class="col" [class]="'col e-' + $index">
+                <em>{{ b.texto }}</em>
+                <i [style.height.%]="b.v ? b.pct : 2"></i>
+                <span>{{ b.label }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      </section>
 
-            <ul class="items">
-              @for (i of r.items; track $index) {
-                <li>
-                  <span><b>{{ i.servicio }}</b> · {{ i.paquete }}</span>
-                  <span>${{ i.subtotal }}</span>
-                  @if (i.regalo || i.adicionales.length) {
-                    <small>
-                      @if (i.regalo) { Regalo: {{ i.regalo }} }
-                      @for (a of i.adicionales; track a.id) { · + {{ a.nombre }} (${{ a.precio }}) }
-                    </small>
+      <!-- Lista de reservas -->
+      <section class="panel list">
+        <div class="list__head">
+          <h2>Reservas</h2>
+          <nav class="tabs" aria-label="Estado de las reservas">
+            @for (t of tabs; track t.id) {
+              <button [class.on]="tab() === t.id" (click)="tab.set(t.id)">
+                {{ t.label }} <span>{{ cuenta()[t.id] }}</span>
+              </button>
+            }
+          </nav>
+        </div>
+
+        @if (cargando() && !reservas().length) {
+          <p class="vacio">Cargando reservas…</p>
+        } @else if (!dias().length) {
+          <p class="vacio">No hay reservas {{ tab() === 'todas' ? '' : tab() + 's' }} por ahora.</p>
+        }
+
+        @for (d of dias(); track d.fecha) {
+          <section class="dia" [class.pasado]="d.pasado">
+            <h2>{{ d.titulo }} @if (d.pasado) { <small>ya pasó</small> }</h2>
+
+            @for (r of d.reservas; track r.id) {
+              <article class="card" [class]="'card s-' + r.status">
+                <div class="card__head">
+                  <span class="hora">{{ r.hora }}</span>
+                  <span class="code">{{ r.code }}</span>
+                  <span class="chip">{{ r.status }}</span>
+                  @if (r.abono) {
+                    <span class="chip chip--abono">abono recibido</span>
                   }
-                </li>
-              }
-            </ul>
+                  @if (r.calendar_event_id) {
+                    <span class="chip chip--cal">en tu Google Calendar</span>
+                  }
+                  <span class="total">${{ r.total }}</span>
+                </div>
 
-            <textarea rows="2" placeholder="Notas internas (solo las ves tú)" [value]="r.notas" (blur)="guardarNotas(r, valor($event))"></textarea>
+                @if (choques().get(r.id); as cerca) {
+                  <p class="choque">
+                    Cerca de otra reserva:
+                    @for (o of cerca; track o.id) {
+                      <b>{{ o.code }} a las {{ o.hora }}</b>
+                    }
+                  </p>
+                }
 
-            <div class="actions" [class.busy]="guardando() === r.id">
-              @if (r.status !== 'confirmada') {
-                <button class="primary" (click)="cambiarEstado(r, 'confirmada')">Confirmar</button>
-              }
-              @if (r.status !== 'cancelada') {
-                <button class="danger" (click)="cambiarEstado(r, 'cancelada')">Cancelar</button>
-              } @else {
-                <button class="ghost" (click)="cambiarEstado(r, 'pendiente')">Volver a pendiente</button>
-              }
-              @if (r.status !== 'cancelada') {
-                <button class="ghost" (click)="alternarAbono(r)">{{ r.abono ? 'Quitar abono' : 'Abono recibido' }}</button>
-              }
-              @if (r.status === 'confirmada' && !r.calendar_event_id) {
-                <!-- Respaldo: si el calendario automático no está conectado, se agrega con un toque -->
-                <a class="ghost btn-link" [href]="r.calendar_url" target="_blank" rel="noopener">Agregar a Google Calendar</a>
-              }
-            </div>
-            <p class="meta">Reservada el {{ creada(r) }} · {{ r.pais }}</p>
-          </article>
+                <div class="cliente">
+                  <b>{{ r.nombre }}</b>
+                  <a [href]="whatsapp(r)" target="_blank" rel="noopener" class="wa">WhatsApp {{ r.telefono }}</a>
+                  <a [href]="'mailto:' + r.email">{{ r.email }}</a>
+                  <a [href]="mapa(r)" target="_blank" rel="noopener">{{ r.direccion }}</a>
+                </div>
+
+                <ul class="items">
+                  @for (i of r.items; track $index) {
+                    <li>
+                      <span><b>{{ i.servicio }}</b> · {{ i.paquete }}</span>
+                      <span>${{ i.subtotal }}</span>
+                      @if (i.regalo || i.adicionales.length) {
+                        <small>
+                          @if (i.regalo) { Regalo: {{ i.regalo }} }
+                          @for (a of i.adicionales; track a.id) { · + {{ a.nombre }} (${{ a.precio }}) }
+                        </small>
+                      }
+                    </li>
+                  }
+                </ul>
+
+                <textarea rows="2" placeholder="Notas internas (solo las ves tú)" [value]="r.notas" (blur)="guardarNotas(r, valor($event))"></textarea>
+
+                <div class="actions" [class.busy]="guardando() === r.id">
+                  @if (r.status !== 'confirmada') {
+                    <button class="primary" (click)="cambiarEstado(r, 'confirmada')">Confirmar</button>
+                  }
+                  @if (r.status !== 'cancelada') {
+                    <button class="danger" (click)="cambiarEstado(r, 'cancelada')">Cancelar</button>
+                  } @else {
+                    <button class="ghost" (click)="cambiarEstado(r, 'pendiente')">Volver a pendiente</button>
+                  }
+                  @if (r.status !== 'cancelada') {
+                    <button class="ghost" (click)="alternarAbono(r)">{{ r.abono ? 'Quitar abono' : 'Abono recibido' }}</button>
+                  }
+                  @if (r.status === 'confirmada' && !r.calendar_event_id) {
+                    <!-- Respaldo: si el calendario automático no está conectado, se agrega con un toque -->
+                    <a class="ghost btn-link" [href]="r.calendar_url" target="_blank" rel="noopener">Agregar a Google Calendar</a>
+                  }
+                </div>
+                <p class="meta">Reservada el {{ creada(r) }} · {{ r.pais }}</p>
+              </article>
+            }
+          </section>
         }
       </section>
     }
   </main>
-}
+</div>
