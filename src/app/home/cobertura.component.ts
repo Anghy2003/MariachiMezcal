@@ -11,6 +11,12 @@ import { prefersReducedMotion } from '../core/motion';
     <section id="cobertura" class="section section--cream cobertura">
       <div class="container">
         <div class="card" reveal="up">
+          <!-- Bandera de Ecuador de fondo, casi transparente, con franjas onduladas que se desvanecen hacia las orillas -->
+          <svg class="fondo" viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true">
+            <rect width="1200" height="400" fill="#f3c63f" />
+            <path d="M0 214C240 168 470 252 720 206S1060 162 1200 198V400H0Z" fill="#2f4f9e" />
+            <path d="M0 312C240 266 470 350 720 304S1060 260 1200 296V400H0Z" fill="#c4452f" />
+          </svg>
           <div class="head">
             <canvas class="flag" aria-hidden="true"></canvas>
             <div class="centro">
@@ -32,12 +38,19 @@ import { prefersReducedMotion } from '../core/motion';
     .cobertura { padding-top: 0; }
     .card {
       padding: clamp(32px, 4.5vw, 56px) clamp(18px, 4vw, 48px) clamp(30px, 4vw, 48px);
+      position: relative;
+      overflow: hidden;
       border-radius: var(--radius-lg);
       background: #fff;
       box-shadow: 0 0 0 1px rgba(163, 74, 44, 0.25), 0 30px 60px -40px rgba(30, 38, 32, 0.5);
     }
     /* Banderas a los lados y, en medio, el título con los cantones */
-    .head { max-width: 1060px; margin: 0 auto; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: clamp(14px, 4vw, 56px); text-align: center; }
+    .fondo {
+      position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.2;
+      -webkit-mask-image: radial-gradient(ellipse 62% 75% at 50% 55%, #000 30%, transparent 100%);
+      mask-image: radial-gradient(ellipse 62% 75% at 50% 55%, #000 30%, transparent 100%);
+    }
+    .head { position: relative; max-width: 1060px; margin: 0 auto; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: clamp(14px, 4vw, 56px); text-align: center; }
     h2 { margin: 0; font-family: var(--font-display); font-size: clamp(28px, 3.4vw, 44px); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); }
     .head p { margin: 6px 0 clamp(20px, 2.6vw, 30px); font-family: var(--font-serif); font-style: italic; font-size: clamp(16px, 1.6vw, 20px); color: var(--tomato); }
 
@@ -49,8 +62,8 @@ import { prefersReducedMotion } from '../core/motion';
     .zonas li {
       padding: 10px 20px;
       border-radius: 999px;
-      background: var(--cream);
-      box-shadow: inset 0 0 0 1px rgba(163, 74, 44, 0.22);
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: inset 0 0 0 1px rgba(163, 74, 44, 0.22), 0 6px 14px -10px rgba(30, 38, 32, 0.35);
       font-weight: 700;
       font-size: 13px;
       letter-spacing: 0.12em;
