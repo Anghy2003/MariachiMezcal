@@ -5,6 +5,7 @@ import { SmoothScroll } from '../core/smooth-scroll.service';
 import { ScrollTrigger } from '../core/motion';
 import { HeroComponent } from './hero.component';
 import { HistoriaComponent } from './historia.component';
+import { CoberturaComponent } from './cobertura.component';
 import { ServiciosComponent } from './servicios.component';
 import { NuestrosServiciosComponent } from './nuestros-servicios.component';
 import { InternacionalComponent } from './internacional.component';
@@ -19,6 +20,7 @@ import { FaqComponent } from './faq.component';
   imports: [
     HeroComponent,
     HistoriaComponent,
+    CoberturaComponent,
     ServiciosComponent,
     NuestrosServiciosComponent,
     InternacionalComponent,
@@ -30,6 +32,7 @@ import { FaqComponent } from './faq.component';
   template: `
     <app-hero [start]="nav.introDone()" />
     <app-historia />
+    <app-cobertura />
     <app-nuestros-servicios />
     <app-paquetes />
     <app-internacional />
