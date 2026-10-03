@@ -44,8 +44,6 @@ export interface Service {
   fitWide?: boolean;
   /** Fotos propias para la tarjeta de "Nuestros paquetes" (versiones verticales que llenan la tarjeta). */
   cardPhotos?: string[];
-  /** Video corto (vertical, con marca de agua) que reemplaza las fotos en la tarjeta de paquetes. */
-  cardVideo?: { src: string; poster: string };
   packages: ServicePackage[];
   addons: boolean;
   effect: EffectMode;
@@ -133,10 +131,8 @@ export const SERVICES: Service[] = [
       'Show cómico con serenata de 3 canciones. Tú eliges la vestimenta, traje de mariachi o traje regional, y contamos con patrones varones y patronas mujeres para niños y adultos. Un detalle que recuerda que abrazar a los tuyos no necesita una fecha especial. Incluye transporte a la zona urbana céntrica; a las afueras el valor sube.',
     from: 25,
     priceLabel: 'Desde $25',
-    image: 'img/oso.webp',
-    cutout: true,
+    image: 'img/patron-3.webp',
     gallery: [
-      'img/oso.webp',
       'img/patron-3.webp',
       'img/patron-1.webp',
       'img/patron-4.webp',
@@ -276,7 +272,6 @@ export const SERVICES: Service[] = [
     gallery: ['img/misas-musicos.webp'],
     // Versión vertical (fondo de la iglesia extendido) para que la tarjeta muestre a los dos músicos
     cardPhotos: ['img/misas-musicos-alto.webp'],
-    cardVideo: { src: 'video/misas.mp4', poster: 'video/misas.jpg' },
     packages: [{ id: 'misa', name: 'Cantantes para misa', note: 'Voz y piano o guitarra', price: 70 }],
     addons: false,
     effect: 'candle',

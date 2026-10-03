@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, afterNextRender, inject } from '@angular/core';
 import { RevealDirective } from '../core/directives';
+import { prefersReducedMotion } from '../core/motion';
 
 /** Cobertura: los cantones donde llevamos la serenata, entre dos banderas de Ecuador ondeando. Va debajo de "Nuestra historia". */
 @Component({
@@ -11,11 +12,7 @@ import { RevealDirective } from '../core/directives';
       <div class="container">
         <div class="card" reveal="up">
           <div class="head">
-            <span class="flag" aria-hidden="true">
-              @for (i of slices; track i) {
-                <i [style.--i]="i" [style.--p]="i"></i>
-              }
-            </span>
+            <canvas class="flag" aria-hidden="true"></canvas>
             <div class="centro">
               <h2>Cobertura</h2>
               <p>Cubrimos las siguientes zonas</p>
@@ -25,11 +22,7 @@ import { RevealDirective } from '../core/directives';
                 }
               </ul>
             </div>
-            <span class="flag flag--right" aria-hidden="true">
-              @for (i of slices; track i) {
-                <i [style.--i]="i" [style.--p]="slices.length - 1 - i"></i>
-              }
-            </span>
+            <canvas class="flag flag--right" aria-hidden="true"></canvas>
           </div>
         </div>
       </div>
@@ -48,58 +41,9 @@ import { RevealDirective } from '../core/directives';
     h2 { margin: 0; font-family: var(--font-display); font-size: clamp(28px, 3.4vw, 44px); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); }
     .head p { margin: 6px 0 clamp(20px, 2.6vw, 30px); font-family: var(--font-serif); font-style: italic; font-size: clamp(16px, 1.6vw, 20px); color: var(--tomato); }
 
-    /* Bandera de Ecuador ondeando: tiras verticales con una onda que nace en el asta y crece hacia la punta,
-       con luz y sombra que viajan junto con la onda. --p = distancia de la tira al asta. */
-    .flag {
-      --w: clamp(96px, 12vw, 170px);
-      --n: 72;
-      position: relative;
-      display: flex;
-      width: var(--w);
-      height: calc(var(--w) * 2 / 3);
-      margin-top: calc(var(--w) * 0.12);
-      flex: none;
-      filter: drop-shadow(0 12px 14px rgba(30, 38, 32, 0.28));
-    }
-    .flag::before {
-      /* asta */
-      content: '';
-      position: absolute;
-      left: -6px;
-      top: calc(var(--w) * -0.1);
-      bottom: calc(var(--w) * -0.42);
-      width: 5px;
-      border-radius: 3px;
-      background: linear-gradient(90deg, #6f5330, #d9b77c 45%, #7a5b34);
-    }
-    .flag::after {
-      /* punta dorada del asta */
-      content: '';
-      position: absolute;
-      left: -9.5px;
-      top: calc(var(--w) * -0.1 - 10px);
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 30%, #fff3c9, #d7a943 45%, #8a6420);
-    }
-    .flag--right::before { left: auto; right: -6px; }
-    .flag--right::after { left: auto; right: -9.5px; }
-    .flag i {
-      --amp: calc(var(--p) / var(--n) * var(--w) * 0.11);
-      flex: 1;
-      height: 100%;
-      margin-right: -0.5px; /* sin rayitas entre tiras */
-      background: url(/img/banderas/ecuador.webp) no-repeat;
-      background-size: var(--w) 100%;
-      background-position: calc(var(--i) * var(--w) / var(--n) * -1) 0;
-      animation: ondear 1.25s ease-in-out infinite alternate;
-      animation-delay: calc(var(--p) * -0.035s);
-    }
-    @keyframes ondear {
-      from { transform: translateY(calc(var(--amp) * -1)) scaleY(1.02); filter: brightness(1.14) saturate(1.08); }
-      to { transform: translateY(var(--amp)) scaleY(0.98); filter: brightness(0.76); }
-    }
+    /* Bandera de Ecuador ondeando: se dibuja en un canvas (ver ondear()), sin asta.
+       Alto extra para que la onda no se corte. */
+    .flag { --w: clamp(96px, 12vw, 170px); width: var(--w); height: calc(var(--w) * 0.9); flex: none; }
 
     .zonas { list-style: none; margin: 0 auto; padding: 0; max-width: 760px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 12px; }
     .zonas li {
@@ -116,18 +60,104 @@ import { RevealDirective } from '../core/directives';
     }
     .zonas li:hover { background: var(--green-800); color: var(--cream); }
 
-    @media (prefers-reduced-motion: reduce) { .flag i { animation: none; } }
     @media (max-width: 640px) {
       .head { gap: 10px; align-items: start; }
       .head p { font-size: 15px; }
-      .flag { --w: 46px; margin-top: 24px; }
-      .flag::before { bottom: calc(var(--w) * -0.5); }
+      .flag { --w: 46px; margin-top: 14px; }
       .zonas { gap: 7px; }
       .zonas li { padding: 7px 11px; font-size: 10.5px; letter-spacing: 0.08em; }
     }
   `,
 })
 export class CoberturaComponent {
-  readonly slices = Array.from({ length: 72 }, (_, i) => i);
   readonly zonas = ['Cuenca', 'Azogues', 'Paute', 'Gualaceo', 'Cañar', 'Déleg', 'Sígsig', 'Tarqui', 'Chordeleg', 'Nabón', 'Jima', 'San José de Raranga'];
+
+  constructor() {
+    const host = inject(ElementRef<HTMLElement>).nativeElement as HTMLElement;
+    let stop = () => {};
+    afterNextRender(() => (stop = ondear(host)));
+    inject(DestroyRef).onDestroy(() => stop());
+  }
+}
+
+/**
+ * Dibuja las banderas ondeando en sus canvas: la tela se corta en tiras de 2 px que suben y bajan con
+ * una onda que crece hacia el borde libre, con luz y sombra que viajan con ella.
+ * Es mucho más liviano que animar decenas de elementos con CSS, y solo se anima mientras se ve en pantalla.
+ */
+function ondear(host: HTMLElement): () => void {
+  const canvases = [...host.querySelectorAll<HTMLCanvasElement>('canvas.flag')];
+  const img = new Image();
+  img.src = 'img/banderas/ecuador.webp';
+  let raf = 0;
+  let visible = false;
+  let last = 0;
+
+  const ajustar = () => {
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    for (const c of canvases) {
+      c.width = Math.round(c.clientWidth * dpr);
+      c.height = Math.round(c.clientHeight * dpr);
+    }
+  };
+
+  const dibujar = (t: number) => {
+    if (!img.complete || !img.naturalWidth) return;
+    canvases.forEach((c, k) => {
+      const ctx = c.getContext('2d');
+      if (!ctx) return;
+      const W = c.width;
+      const fh = (W * 2) / 3;
+      const top = (c.height - fh) / 2;
+      const paso = Math.max(2, Math.round(W / 90));
+      ctx.clearRect(0, 0, W, c.height);
+      for (let x = 0; x < W; x += paso) {
+        const d = k === 0 ? x / W : 1 - x / W; // distancia al borde de afuera (lado "sujeto": ahí la onda es menor)
+        const ramp = 0.18 + 0.82 * Math.pow(d, 1.15);
+        const fase = 2 * Math.PI * (d * 1.05 - t);
+        const y = top + W * 0.08 * ramp * Math.sin(fase);
+        ctx.drawImage(img, (x / W) * img.naturalWidth, 0, (paso / W) * img.naturalWidth, img.naturalHeight, x, y, paso + 0.5, fh);
+        const luz = 0.2 * Math.cos(fase) * (0.25 + 0.75 * ramp);
+        ctx.fillStyle = luz > 0 ? `rgba(255,255,255,${luz * 0.55})` : `rgba(0,0,0,${-luz * 0.7})`;
+        ctx.fillRect(x, y, paso + 0.5, fh);
+      }
+    });
+  };
+
+  const bucle = (now: number) => {
+    raf = requestAnimationFrame(bucle);
+    if (now - last < 33) return; // ~30 cuadros por segundo es suficiente para una tela
+    last = now;
+    dibujar((now / 1800) % 1);
+  };
+  const arrancar = () => {
+    if (!raf && visible && !document.hidden && !prefersReducedMotion()) raf = requestAnimationFrame(bucle);
+  };
+  const parar = () => {
+    cancelAnimationFrame(raf);
+    raf = 0;
+  };
+
+  ajustar();
+  img.onload = () => dibujar(0.25);
+  const io = new IntersectionObserver(([e]) => {
+    visible = e.isIntersecting;
+    if (visible) arrancar();
+    else parar();
+  });
+  io.observe(host);
+  const ro = new ResizeObserver(() => {
+    ajustar();
+    dibujar(0.25);
+  });
+  ro.observe(canvases[0]);
+  const alCambiarPestana = () => (document.hidden ? parar() : arrancar());
+  document.addEventListener('visibilitychange', alCambiarPestana);
+
+  return () => {
+    parar();
+    io.disconnect();
+    ro.disconnect();
+    document.removeEventListener('visibilitychange', alCambiarPestana);
+  };
 }
