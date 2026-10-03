@@ -5,6 +5,11 @@ name = "mezcal-panel"
 main = "src/index.ts"
 compatibility_date = "2026-09-01"
 
+# Dominio propio (comprado en Cloudflare). Cloudflare crea el DNS y el candado HTTPS solo.
+routes = [
+  { pattern = "panel.mariachimezcalcuenca.com", custom_domain = true },
+]
+
 [assets]
 directory = "../dist/panel/browser"
 binding = "ASSETS"
@@ -16,9 +21,9 @@ ENVIRONMENT = "production"
 # Correo que recibe el aviso de cada reserva nueva
 OWNER_EMAIL = "jannethbridge@gmail.com"
 # Remitente de los correos (debe ser del dominio verificado en Resend)
-FROM_EMAIL = "Mariachi Mezcal <reservas@mariachimezcal.com>"
+FROM_EMAIL = "Mariachi Mezcal <reservas@mariachimezcalcuenca.com>"
 # Dirección del panel, para el botón "Ver en el panel" del correo
-PANEL_URL = "https://mezcal-panel.mezcal-api.workers.dev"
+PANEL_URL = "https://panel.mariachimezcalcuenca.com"
 # Páginas que pueden enviar reservas desde otro origen (la página propia no lo necesita)
 ALLOWED_ORIGINS = ""
 # Cuentas de Google que pueden usar el panel (separadas por coma)

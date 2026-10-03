@@ -53,7 +53,7 @@ npx ng serve panel --port 4301                              # panel (pide la cla
 
 En modo prueba los correos no se envían: se muestran en la consola del backend.
 
-Publicado (pendiente): página y panel en Cloudflare Pages, el backend respondiendo en `tudominio.com/api/*` y `panel.tudominio.com/api/*`, y el panel protegido con Cloudflare Access (cuenta de Google). Valores a completar en `api/wrangler.toml`: dominio, `database_id`, `ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`; secretos con `wrangler secret put RESEND_API_KEY` y `RATE_SALT`.
+Publicado en Cloudflare: página y reservas en https://mariachimezcalcuenca.com (y www), panel en https://panel.mariachimezcalcuenca.com. Publicar cambios: `npm run build` (o `npm run build:panel`) en la raíz y luego, en `api/`, `npx wrangler deploy` (o `npx wrangler deploy -c wrangler.panel.toml`). Pendiente: secreto `RESEND_API_KEY` (correos) y Cloudflare Access para el panel (`ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`).
 
 ## Dónde cambiar cosas
 
