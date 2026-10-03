@@ -124,7 +124,7 @@ export class HeroComponent {
 
     this.ctx = gsap.context(() => {
       const title = this.host.querySelector<HTMLElement>('.title')!;
-      this.split = SplitText.create(this.q('.line'), { type: 'chars' });
+      this.split = SplitText.create(this.q('.line'), { type: 'words, chars' });
 
       // Efecto de la referencia: el título aparece enorme en el centro y se achica hasta su lugar
       const heroBox = this.host.getBoundingClientRect();

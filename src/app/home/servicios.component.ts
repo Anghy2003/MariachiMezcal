@@ -45,23 +45,14 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
                 <span class="title">{{ s.shortName }}</span>
 
                 <div class="tiles" [class.one]="s.packages.length === 1">
-                  @if (s.sharedGifts; as sg) {
-                    <!-- Una sola viñeta para los regalos que se repiten en los paquetes -->
-                    <div class="shared">
-                      <em>Gratis</em>
-                      <ul>
-                        @for (g of sg.gifts; track g) {
-                          <li>{{ g }}</li>
-                        }
-                      </ul>
-                      <small>{{ sg.note }}</small>
-                    </div>
-                  }
                   @for (p of s.packages; track p.id) {
                     <button class="tile" [class.star]="p.tag" (click)="nav.service(s.slug, p.id)">
                       <span class="price">\${{ p.price }}</span>
                       <b>{{ p.name }}</b>
-                    @if (s.packages.length > 1 && p.gifts?.length && !s.sharedGifts) {
+                    @if (s.packages.length > 1 && p.tileNote) {
+                      <small>{{ p.tileNote }}</small>
+                    }
+                    @if (s.packages.length > 1 && p.gifts?.length) {
                       <!-- Regalos a elegir gratis, en viñeta -->
                       <span class="free">
                         <em>Gratis</em>
@@ -87,7 +78,7 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
 
               <button class="caption" (click)="nav.service(s.slug)">
                 <h3>{{ s.name }}</h3>
-                <span>{{ s.packages.length > 1 ? 'Desde ' : '' }}\${{ s.from }}</span>
+                <span>{{ s.packages.length > 1 ? 'Desde ' : '' }}\${{ s.from }} · Cuenca, Ecuador</span>
               </button>
             </article>
           }
@@ -163,11 +154,6 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
     .tile.star { border-color: var(--tomato-logo); }
     .price { font-family: var(--font-serif); font-size: 26px; line-height: 1; }
     .tile b { font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.35; }
-    .shared { grid-column: 1 / -1; pointer-events: auto; padding: 12px 16px 13px; border-radius: 12px; background: rgba(163, 74, 44, 0.9); box-shadow: 0 12px 26px -16px rgba(0, 0, 0, 0.6); }
-    .shared em { display: inline-block; padding: 2px 10px; border-radius: 999px; background: var(--cream); color: var(--tomato); font-style: normal; font-size: 10.5px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
-    .shared ul { list-style: none; margin: 8px 0 4px; padding: 0; display: grid; gap: 2px; font-size: 13.5px; font-weight: 600; line-height: 1.4; color: var(--cream); }
-    .shared li::before { content: '– '; color: rgba(244, 238, 227, 0.7); }
-    .shared small { font-size: 11.5px; color: rgba(244, 238, 227, 0.8); }
     .free { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; margin-top: 6px; font-size: 12px; line-height: 1.35; color: var(--cream-muted); }
     .free em { margin-bottom: 3px; padding: 2px 9px; border-radius: 999px; background: var(--tomato); color: var(--cream); font-style: normal; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
     .free span::before { content: '– '; color: var(--tomato-logo); }
@@ -178,9 +164,10 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
     .perks img { height: 42px; width: auto; margin-left: -10px; filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.45)); transition: transform 0.5s var(--ease-out); }
     .perks img:nth-child(1) { rotate: -6deg; }
     .perks img:nth-child(2) { rotate: 5deg; }
-    .perks .cuy, .perks .oso { height: 60px; }
+    .perks .cuy { height: 60px; }
+    .perks .oso { height: 54px; }
     /* El oso de charro es alto y delgado: cuando va solo, más grande y sin girar para que no se pierda */
-    .perks img.oso:only-child { height: 78px; rotate: 0deg; }
+    .perks img.oso:only-child { height: 66px; rotate: 0deg; }
     .tile:hover .perks img { transform: translateY(-4px) scale(1.06); }
 
     /* Un solo paquete: recuadro grande, texto a la izquierda y regalos a la derecha */
@@ -190,7 +177,7 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
     .tiles.one .price { font-size: 44px; }
     .tiles.one .tile b { font-size: 12px; margin-top: 4px; }
     .tiles.one .perks img { height: 84px; margin-left: -16px; }
-    .tiles.one .perks .oso { height: 100px; }
+    .tiles.one .perks .oso { height: 92px; }
 
     /* ---------- Debajo del flyer ---------- */
     .caption { display: block; padding: 16px 4px 0; text-align: left; color: var(--ink); }
@@ -245,7 +232,7 @@ export class ServiciosComponent {
     return s.cutout ? s.gallery.filter((g) => g !== s.image) : s.gallery;
   }
   readonly perkImage: Record<Perk, string> = {
-    oso: 'img/oso.webp',
+    oso: 'img/regalos/oso-amoroso.webp',
     ramo: 'img/regalos/ramo.webp',
     cuy: 'img/regalos/cuy.webp',
   };

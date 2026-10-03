@@ -199,6 +199,11 @@
   }
   .title {
     font-size: clamp(30px, 9vw, 60px);
+
+    /* En celular la línea puede pasar a la siguiente entre palabras, nunca a mitad de palabra */
+    .line {
+      white-space: normal;
+    }
   }
   .stats {
     margin-top: 26px;
