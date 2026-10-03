@@ -97,11 +97,10 @@ export const SERVICES: Service[] = [
     priceLabel: '$25',
     image: 'img/solista.webp',
     imagePosition: '50% 30%',
-    // Solista mujer y varón primero (para que se vea que hay solistas mujeres) y las dos de Adrián al final
-    clientPhotos: ['img/solista-mujer.webp', 'img/solista-xavier.webp', 'img/momento-4.webp', 'img/momento-3.webp'],
+    // Xavier primero y Adrián al final
+    clientPhotos: ['img/solista-xavier.webp', 'img/momento-4.webp', 'img/momento-3.webp'],
     gallery: [
       'img/solista.webp',
-      'img/solista-mujer.webp',
       'img/solista-xavier.webp',
       'img/solista-3.webp',
       'img/solista-5.webp',
@@ -144,10 +143,10 @@ export const SERVICES: Service[] = [
       'img/patron-2.webp',
     ],
     packages: [
-      { id: 'patron-1', name: 'Patrón + serenata', note: 'Show cómico + 3 canciones · gratis oso amoroso o ramo', price: 25, gifts: ['Oso amoroso', 'Ramo de flores'], perks: ['oso', 'ramo'] },
-      { id: 'patron-2', name: 'Patrón + osito u osita', note: 'Incluye serenata de 3 canciones', price: 30, perks: ['oso'] },
-      { id: 'patron-3', name: 'Patrón + osita + ramo', note: 'Incluye serenata de 3 canciones', price: 35, tag: 'Favorito', perks: ['oso', 'ramo'] },
-      { id: 'patron-4', name: 'Patrón + 1 mariachi extra + osita + ramo', note: 'Mariachi varón o mujer · serenata de 4 canciones', price: 40, perks: ['oso', 'ramo'] },
+      { id: 'patron-1', name: 'Patrón + serenata', note: 'Show cómico + 3 canciones · gratis oso amoroso o ramo', tileNote: '3 canciones', price: 25, gifts: ['Oso amoroso', 'Ramo de flores'], perks: ['oso', 'ramo'] },
+      { id: 'patron-2', name: 'Patrón + osito u osita', note: 'Incluye serenata de 3 canciones', tileNote: 'Serenata de 3 canciones', price: 30, perks: ['oso'] },
+      { id: 'patron-3', name: 'Patrón + osita + ramo', note: 'Incluye serenata de 4 canciones', tileNote: 'Serenata de 4 canciones', price: 35, tag: 'Favorito', perks: ['oso', 'ramo'] },
+      { id: 'patron-4', name: 'Patrón + 1 mariachi extra + osita + ramo', note: 'Mariachi varón o mujer · serenata de 4 canciones', tileNote: 'Serenata de 4 canciones', price: 40, perks: ['oso', 'ramo'] },
     ],
     addons: true,
     effect: 'confetti',
@@ -235,7 +234,7 @@ export const SERVICES: Service[] = [
         gifts: ['Ramo de flores', 'Oso amoroso', 'Cuysito disfrazado'],
         perks: ['ramo', 'oso', 'cuy'],
       },
-      { id: 'grupo-patron', name: 'Grupo completo + Show del Patrón', note: '8 mariachis · 7 canciones · patrón o patrona + ramo', tileNote: '8 mariachis + el patrón y un ramo de flores', price: 150, perks: ['ramo'] },
+      { id: 'grupo-patron', name: 'Grupo completo + Show del Patrón', note: '8 mariachis · 7 canciones · patrón o patrona + ramo', tileNote: '8 mariachis · 7 canciones + el patrón y un ramo de flores', price: 150, perks: ['ramo'] },
     ],
     addons: true,
     effect: 'picado',
