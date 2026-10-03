@@ -53,7 +53,7 @@ npx ng serve panel --port 4301                              # panel (pide la cla
 
 En modo prueba los correos no se envían: se muestran en la consola del backend.
 
-Publicado en Cloudflare: página y reservas en https://mariachimezcalcuenca.com (y www), panel en https://panel.mariachimezcalcuenca.com. Publicar cambios: `npm run build` (o `npm run build:panel`) en la raíz y luego, en `api/`, `npx wrangler deploy` (o `npx wrangler deploy -c wrangler.panel.toml`). Pendiente: secreto `RESEND_API_KEY` (correos) y Cloudflare Access para el panel (`ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`).
+Publicado en Cloudflare: página y reservas en https://mariachimezcalcuenca.com (y www), panel en https://panel.mariachimezcalcuenca.com. Publicar cambios: `npm run build` (o `npm run build:panel`) en la raíz y luego, en `api/`, `npx wrangler deploy` (o `npx wrangler deploy -c wrangler.panel.toml`). Activos: correos con Resend (`RESEND_API_KEY`), panel protegido con Cloudflare Access (código por correo) y Google Calendar con una cuenta de servicio (`GOOGLE_SERVICE_ACCOUNT`, calendario compartido con `mezcal-calendario@mariachis-469616.iam.gserviceaccount.com`).
 
 ## Dónde cambiar cosas
 
@@ -65,5 +65,5 @@ Publicado en Cloudflare: página y reservas en https://mariachimezcalcuenca.com 
 
 - Videos reales y fotos de los artistas, de los adicionales (vaquita loca, ramo, vino, chocolates) y de la videollamada.
 - Confirmar con la clienta los precios de Dúos (4 canciones con regalo $35, 7 canciones $55) y de los adicionales (vaquita $15, chocolates $8, vinos $12): se tomaron del diseño de Figma.
-- Publicar el sistema de reservas: cuentas de Cloudflare y Resend, dominio, Cloudflare Access para el panel. Fase 2: Google Calendar automático. Fase 3: recordatorio del día anterior y copia semanal por correo.
+- Publicar el sistema de reservas: cuentas de Cloudflare y Resend, dominio, Cloudflare Access para el panel. Fase 3: recordatorio del día anterior y copia semanal por correo.
 - Permiso de las familias (y sobre todo de los niños) que aparecen en las fotos reales antes de publicar.
