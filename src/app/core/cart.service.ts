@@ -1,5 +1,5 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { ADDONS, findPackage } from '../data/services.data';
+import { ADDONS, addonLabel, findPackage } from '../data/services.data';
 
 export interface AddonChoice {
   id: string;
@@ -36,7 +36,7 @@ export class CartService {
     return {
       service: found?.service,
       pkg: found?.pkg,
-      addons: item.addons.map((a) => ({ ...a, name: ADDONS.find((x) => x.id === a.id)?.name ?? a.id })),
+      addons: item.addons.map((a) => ({ ...a, name: addonLabel(ADDONS.find((x) => x.id === a.id), a.price, a.id) })),
     };
   }
 
@@ -66,7 +66,19 @@ export class CartService {
       // Paquetes renombrados: el carrito guardado pasa al id nuevo en vez de perderse
       // patron-5 (Patrón + mariachi completo) es el mismo servicio que el de Grupos
       const renamed: Record<string, string> = { 'duo-12': 'duo-13', 'patron-5': 'grupo-patron' };
-      return parsed.map((i) => ({ ...i, packageId: renamed[i.packageId] ?? i.packageId })).filter((i) => findPackage(i.packageId));
+      return parsed
+        .map((i) => ({
+          ...i,
+          packageId: renamed[i.packageId] ?? i.packageId,
+          // Si un adicional cambió de precio (ej. la vaquita), el carrito guardado toma el precio actual
+          addons: i.addons
+            .filter((a) => ADDONS.some((x) => x.id === a.id))
+            .map((a) => {
+              const x = ADDONS.find((y) => y.id === a.id)!;
+              return { id: a.id, price: x.options ? (x.options.includes(a.price) ? a.price : x.options[0]) : x.price };
+            }),
+        }))
+        .filter((i) => findPackage(i.packageId));
     } catch {
       return [];
     }

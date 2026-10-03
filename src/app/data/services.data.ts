@@ -54,15 +54,27 @@ export interface Addon {
   name: string;
   price: number;
   options?: number[];
-  image: string;
+  /** Foto del adicional; si no tiene, se muestra un ícono. */
+  image?: string;
+  /** Si se cobra por unidad (ej. canciones): nombre en singular y plural para las opciones. */
+  unit?: { one: string; many: string };
+}
+
+/** Nombre del adicional según lo elegido: "2 canciones extra" o simplemente "Vaquita loca". */
+export function addonLabel(addon: Addon | undefined, price: number, id = ''): string {
+  if (!addon) return id;
+  if (!addon.unit) return addon.name;
+  const n = Math.round(price / addon.price);
+  return `${n} ${n === 1 ? addon.unit.one : addon.unit.many}`;
 }
 
 export const ADDONS: Addon[] = [
   { id: 'ramo', name: 'Ramo de rosas', price: 5, options: [5, 10, 15], image: 'img/regalos/ramo.webp' },
-  { id: 'vaquita', name: 'Vaquita loca', price: 15, image: 'img/regalos/vaquita.webp' },
+  { id: 'vaquita', name: 'Vaquita loca', price: 10, image: 'img/regalos/vaquita.webp' },
   { id: 'chocolates', name: 'Chocolates', price: 8, image: 'img/regalos/chocolates.webp' },
   { id: 'vinos', name: 'Vinos', price: 12, image: 'img/regalos/vino.webp' },
   { id: 'cuy', name: 'Cuysito disfrazado', price: 5, image: 'img/regalos/cuy.webp' },
+  { id: 'cancion', name: 'Canción extra', price: 5, options: [5, 10, 15, 20], unit: { one: 'canción extra', many: 'canciones extra' } },
 ];
 
 export const INCLUDED = [

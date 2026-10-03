@@ -1,4 +1,4 @@
-import { ADDONS, findPackage } from '../../src/app/data/services.data';
+import { ADDONS, addonLabel, findPackage } from '../../src/app/data/services.data';
 import type { ReservaItem } from './types';
 
 /** Lo que manda el formulario de la página. Todo se revisa: nada se da por bueno. */
@@ -85,7 +85,7 @@ export function validarReserva(body: unknown): { ok: true; data: ReservaValida }
         errors.push('adicionales');
         break;
       }
-      adicionales.push({ id: addon.id, nombre: addon.name, precio: a.price });
+      adicionales.push({ id: addon.id, nombre: addonLabel(addon, a.price), precio: a.price });
     }
 
     items.push({

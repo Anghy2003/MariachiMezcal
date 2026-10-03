@@ -14,7 +14,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ADDONS, INCLUDED, SERVICES, Service, findService } from '../data/services.data';
+import { ADDONS, Addon, INCLUDED, SERVICES, Service, addonLabel, findService } from '../data/services.data';
 import { whatsappLink } from '../data/site.data';
 import { CartService } from '../core/cart.service';
 import { NavigationService } from '../core/navigation.service';
@@ -67,7 +67,7 @@ export class ServiceDetailPage {
   }
   readonly waLink = computed(() => {
     const extras = Object.entries(this.extras())
-      .map(([id, p]) => `${ADDONS.find((a) => a.id === id)?.name} ($${p})`)
+      .map(([id, p]) => `${addonLabel(ADDONS.find((a) => a.id === id), p, id)} ($${p})`)
       .join(', ');
     return whatsappLink(
       `¡Hola Mariachi Mezcal! Me interesa ${this.service().name}: ${this.selected().name} ($${this.selected().price})` +
@@ -170,6 +170,11 @@ export class ServiceDetailPage {
       else copy[id] = addon.price;
       return copy;
     });
+  }
+
+  /** Texto de cada opción: "$10" o, si es por unidad, "2 · $10". */
+  optionLabel(a: Addon, price: number): string {
+    return a.unit ? `${Math.round(price / a.price)} · $${price}` : `$${price}`;
   }
 
   setAddon(id: string, price: number): void {

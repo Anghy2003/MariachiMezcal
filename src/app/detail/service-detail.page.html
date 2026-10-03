@@ -60,12 +60,12 @@
                 <label>
                   <input type="checkbox" [checked]="isOn(a.id)" (change)="toggleAddon(a.id)" />
                   <i><app-icon name="check" /></i>
-                  {{ a.name }} @if (a.options) { <small>(desde ${{ a.options[0] }})</small> }
+                  {{ a.name }} @if (a.options) { <small>({{ a.unit ? '$' + a.price + ' c/u' : 'desde $' + a.options[0] }})</small> }
                 </label>
                 @if (a.options && isOn(a.id)) {
                   <span class="sizes">
                     @for (o of a.options; track o) {
-                      <button type="button" [class.on]="extras()[a.id] === o" (click)="setAddon(a.id, o)">${{ o }}</button>
+                      <button type="button" [class.on]="extras()[a.id] === o" (click)="setAddon(a.id, o)">{{ optionLabel(a, o) }}</button>
                     }
                   </span>
                 } @else {

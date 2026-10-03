@@ -90,9 +90,13 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
           <ul reveal="stagger">
             @for (a of addons; track a.id) {
               <li>
-                <img [src]="a.image" alt="" loading="lazy" />
+                @if (a.image) {
+                  <img [src]="a.image" alt="" loading="lazy" />
+                } @else {
+                  <span class="note" aria-hidden="true"><app-icon name="music" /></span>
+                }
                 <span>{{ a.name }}</span>
-                <b>{{ a.options ? 'desde' : '+' }} \${{ a.price }}</b>
+                <b>{{ a.unit ? '+ $' + a.price + ' c/u' : (a.options ? 'desde' : '+') + ' $' + a.price }}</b>
               </li>
             }
           </ul>
@@ -190,6 +194,7 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
     .extras ul { list-style: none; margin: 0 auto; padding: 0; max-width: 1100px; display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; }
     .extras li { flex: 0 0 calc((100% - 72px) / 5); display: grid; justify-items: center; gap: 6px; padding: 24px 14px 20px; border-radius: 16px; background: #fff; box-shadow: 0 18px 40px -30px rgba(30, 38, 32, 0.55); }
     .extras img { height: 110px; width: auto; max-width: 100%; object-fit: contain; margin-bottom: 8px; filter: drop-shadow(0 10px 10px rgba(0, 0, 0, 0.18)); transition: transform 0.6s var(--ease-out); }
+    .extras .note { display: grid; place-items: center; width: 110px; height: 110px; margin-bottom: 8px; border-radius: 50%; background: var(--tomato); color: var(--cream); font-size: 52px; box-shadow: 0 14px 26px -14px rgba(163, 74, 44, 0.7); }
     .extras li:hover img { transform: translateY(-5px) rotate(-3deg); }
     .extras span { font-weight: 600; font-size: 15px; color: var(--ink); }
     .extras b { font-family: var(--font-serif); font-weight: 500; font-size: 18px; color: var(--tomato); }
@@ -212,6 +217,7 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
       .extras { margin-top: 48px; }
       .extras li { flex-basis: calc((100% - 18px) / 2); padding: 18px 10px 16px; }
       .extras img { height: 84px; }
+      .extras .note { width: 84px; height: 84px; font-size: 40px; }
       .notes { grid-template-columns: 1fr; }
       .notes p { padding: 16px; }
     }
