@@ -152,8 +152,8 @@ export class NuestrosServiciosComponent {
       subtitle: '3 mariachis · 6 canciones',
       text: 'Tres voces cantando con pista, sin instrumentos. Gratis a elección: ramo, oso amoroso o Show del Patrón.',
       chip: 'Regalo a elección',
-      image: 'img/trio.webp',
-      position: '50% 55%',
+      image: 'img/trio-estudio.webp',
+      position: '50% 30%',
     },
     {
       slug: 'grupos',

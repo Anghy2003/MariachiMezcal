@@ -38,6 +38,8 @@ export interface Service {
   gallery: string[];
   /** Fotos con clientes reales para la tarjeta de "Nuestros paquetes" (si no hay, se usa la galería). */
   clientPhotos?: string[];
+  /** Mostrar completas (sin recortar) las fotos horizontales en su tarjeta de paquetes. */
+  fitWide?: boolean;
   /** Regalos gratis que se repiten en casi todos los paquetes: se muestran en una sola viñeta. */
   sharedGifts?: { gifts: string[]; note: string };
   packages: ServicePackage[];
@@ -81,8 +83,19 @@ export const SERVICES: Service[] = [
     priceLabel: '$25',
     image: 'img/solista.webp',
     imagePosition: '50% 30%',
-    clientPhotos: ['img/momento-4.webp', 'img/momento-3.webp'],
-    gallery: ['img/solista.webp', 'img/solista-3.webp', 'img/solista-4.webp', 'img/solista-5.webp', 'img/solista-6.webp', 'img/solista-2.webp'],
+    // Solista mujer y varón primero (para que se vea que hay solistas mujeres) y las dos de Adrián al final
+    clientPhotos: ['img/solista-mujer.webp', 'img/solista-xavier.webp', 'img/solista-xavier-2.webp', 'img/momento-4.webp', 'img/momento-3.webp'],
+    gallery: [
+      'img/solista.webp',
+      'img/solista-mujer.webp',
+      'img/solista-xavier.webp',
+      'img/solista-xavier-2.webp',
+      'img/solista-3.webp',
+      'img/solista-5.webp',
+      'img/solista-6.webp',
+      'img/solista-2.webp',
+      'img/solista-4.webp',
+    ],
     packages: [
       {
         id: 'solista-3',
@@ -166,9 +179,10 @@ export const SERVICES: Service[] = [
       'Van 3 mariachis y cantan 6 canciones con pista (sin instrumentos). Gratis a elección: oso amoroso, ramo de flores o Show del Patrón.',
     from: 60,
     priceLabel: '$60',
-    image: 'img/trio.webp',
+    image: 'img/trio-estudio.webp',
     imagePosition: '50% 40%',
-    gallery: ['img/trio.webp'],
+    gallery: ['img/trio-estudio.webp', 'img/trio.webp'],
+    fitWide: true,
     packages: [
       {
         id: 'trio-6',

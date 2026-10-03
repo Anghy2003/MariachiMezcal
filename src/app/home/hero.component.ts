@@ -72,6 +72,7 @@ export class HeroComponent {
 
   readonly slides: Slide[] = [
     { image: 'img/hero-mezcal.webp', position: '50% 6%', alt: 'Mariachi con el sombrero bordado Mezcal' },
+    { image: 'img/hero-xavier.webp', position: '50% 30%', alt: 'Mariachi solista con el sombrero Mezcal' },
     { image: 'img/hero-duo.webp', position: '50% 30%', alt: 'Dúo de mariachis con sombreros blancos' },
     { image: 'img/hero-fiesta.webp', position: '50% 45%', alt: 'El grupo completo de Mariachi Mezcal' },
   ];
