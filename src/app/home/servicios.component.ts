@@ -161,13 +161,11 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
 
     /* Fotos de los regalos */
     .perks { display: flex; align-items: flex-end; align-self: flex-end; margin: auto -4px -4px 0; padding-top: 4px; pointer-events: none; }
-    .perks img { height: 42px; width: auto; margin-left: -10px; filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.45)); transition: transform 0.5s var(--ease-out); }
+    /* Sin límite de ancho ni encogimiento: si no, un dibujito que va solo se aplasta de lado */
+    .perks img { flex: none; max-width: none; height: 42px; width: auto; margin-left: -10px; filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.45)); transition: transform 0.5s var(--ease-out); }
     .perks img:nth-child(1) { rotate: -6deg; }
     .perks img:nth-child(2) { rotate: 5deg; }
-    .perks .cuy { height: 60px; }
-    .perks .oso { height: 54px; }
-    /* El oso de charro es alto y delgado: cuando va solo, más grande y sin girar para que no se pierda */
-    .perks img.oso:only-child { height: 66px; rotate: 0deg; }
+    .perks .cuy, .perks .oso { height: 60px; }
     .tile:hover .perks img { transform: translateY(-4px) scale(1.06); }
 
     /* Un solo paquete: recuadro grande, texto a la izquierda y regalos a la derecha */
@@ -177,7 +175,7 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
     .tiles.one .price { font-size: 44px; }
     .tiles.one .tile b { font-size: 12px; margin-top: 4px; }
     .tiles.one .perks img { height: 84px; margin-left: -16px; }
-    .tiles.one .perks .oso { height: 92px; }
+    .tiles.one .perks .oso { height: 100px; }
 
     /* ---------- Debajo del flyer ---------- */
     .caption { display: block; padding: 16px 4px 0; text-align: left; color: var(--ink); }
@@ -232,7 +230,7 @@ export class ServiciosComponent {
     return s.cutout ? s.gallery.filter((g) => g !== s.image) : s.gallery;
   }
   readonly perkImage: Record<Perk, string> = {
-    oso: 'img/regalos/oso-amoroso.webp',
+    oso: 'img/oso.webp',
     ramo: 'img/regalos/ramo.webp',
     cuy: 'img/regalos/cuy.webp',
   };
