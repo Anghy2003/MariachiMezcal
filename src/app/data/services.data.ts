@@ -253,8 +253,8 @@ export const SERVICES: Service[] = [
     imagePosition: '50% 40%',
     gallery: ['img/videollamada.webp'],
     packages: [
-      { id: 'video-llamada', name: 'Serenata por videollamada', note: 'En vivo, a cualquier parte del mundo', price: 25 },
-      { id: 'video-grabado', name: 'Video pregrabado de cumpleaños', note: 'Listo para enviar a quien quieras', price: 25 },
+      { id: 'video-llamada', name: 'Serenata por videollamada', note: '4 canciones · en vivo, a cualquier parte del mundo', tileNote: '4 canciones', price: 25 },
+      { id: 'video-grabado', name: 'Video pregrabado de cumpleaños', note: '4 canciones · listo para enviar a quien quieras', tileNote: '4 canciones', price: 25 },
     ],
     addons: false,
     effect: 'sparkle',

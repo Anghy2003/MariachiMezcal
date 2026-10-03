@@ -15,7 +15,7 @@ import { CountUpDirective, RevealDirective, TiltDirective } from '../core/direct
         </div>
 
         <figure class="photo" reveal="clip">
-          <img src="img/historia.webp" alt="El grupo completo de Mariachi Mezcal frente a una casa colonial" loading="lazy" />
+          <img src="img/misas.webp" alt="Mariachi Mezcal frente a la Catedral de Cuenca" loading="lazy" />
           <figcaption>Merchán Maldonado S.A.S. · Cuenca</figcaption>
         </figure>
 
@@ -50,7 +50,7 @@ import { CountUpDirective, RevealDirective, TiltDirective } from '../core/direct
   `,
   styles: `
     .photo { position: relative; margin: 0; border-radius: var(--radius-lg); overflow: hidden; aspect-ratio: 16 / 7.5; box-shadow: 0 0 0 1px rgba(163, 74, 44, 0.5), 0 40px 80px -40px rgba(30, 38, 32, 0.6); }
-    .photo img { width: 100%; height: 125%; object-fit: cover; object-position: 50% 60%; }
+    .photo img { width: 100%; height: 125%; object-fit: cover; object-position: 50% 80%; }
     figcaption { position: absolute; right: 20px; bottom: 18px; background: var(--green-800); color: var(--cream); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; padding: 10px 16px; border-radius: 999px; }
     .grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: clamp(32px, 6vw, 90px); margin-top: 64px; align-items: start; }
     h3 { font-family: var(--font-display); font-size: clamp(22px, 2.2vw, 30px); letter-spacing: 0.03em; line-height: 1.2; margin: 0 0 22px; text-transform: uppercase; }

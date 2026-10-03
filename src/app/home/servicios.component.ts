@@ -93,7 +93,7 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
                 @if (a.image) {
                   <img [src]="a.image" alt="" loading="lazy" />
                 } @else {
-                  <span class="note" aria-hidden="true"><app-icon name="music" /></span>
+                  <span class="note" aria-hidden="true"><app-icon name="mic" /></span>
                 }
                 <span>{{ a.name }}</span>
                 <b>{{ a.unit ? '+ $' + a.price + ' c/u' : (a.options ? 'desde' : '+') + ' $' + a.price }}</b>

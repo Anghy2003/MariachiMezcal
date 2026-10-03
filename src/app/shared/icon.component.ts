@@ -74,6 +74,9 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
         @case ('alert') {
           <path d="M12 4 21 19H3Z" /><path d="M12 10v4M12 16.8v.2" />
         }
+        @case ('mic') {
+          <rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7" />
+        }
         @case ('music') {
           <path d="M9 18V6l10-2v12" /><circle cx="6.5" cy="18" r="2.5" /><circle cx="16.5" cy="16" r="2.5" />
         }
