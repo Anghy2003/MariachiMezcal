@@ -8,6 +8,8 @@ interface Slide {
   image: string;
   position: string;
   alt: string;
+  /** Foto distinta para celular (vertical), cuando la de computadora deja a la persona en una orilla. */
+  mobile?: string;
 }
 
 const SLIDE_MS = 7;
@@ -25,7 +27,12 @@ const SLIDE_MS = 7;
       <div class="media">
         @for (s of slides; track s.image; let i = $index) {
           <div class="frame" [attr.aria-hidden]="i !== current()">
-            <img [src]="s.image" [style.object-position]="s.position" [alt]="s.alt" [attr.fetchpriority]="i === 0 ? 'high' : null" />
+            <picture>
+              @if (s.mobile) {
+                <source media="(max-width: 899px)" [attr.srcset]="s.mobile" />
+              }
+              <img [src]="s.image" [style.object-position]="s.position" [alt]="s.alt" [attr.fetchpriority]="i === 0 ? 'high' : null" />
+            </picture>
           </div>
         }
       </div>
@@ -72,7 +79,7 @@ export class HeroComponent {
 
   readonly slides: Slide[] = [
     { image: 'img/hero-mezcal.webp', position: '50% 6%', alt: 'Mariachi con el sombrero bordado Mezcal' },
-    { image: 'img/hero-xavier.webp', position: '50% 30%', alt: 'Mariachi solista con el sombrero Mezcal' },
+    { image: 'img/hero-xavier.webp', mobile: 'img/solista-xavier.webp', position: '50% 30%', alt: 'Mariachi solista con el sombrero Mezcal' },
     { image: 'img/hero-duo.webp', position: '50% 30%', alt: 'Dúo de mariachis con sombreros blancos' },
     { image: 'img/hero-fiesta.webp', position: '50% 45%', alt: 'El grupo completo de Mariachi Mezcal' },
   ];
