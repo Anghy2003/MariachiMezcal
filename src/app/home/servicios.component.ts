@@ -226,6 +226,7 @@ export class ServiciosComponent {
   /** Fotos de fondo de la tarjeta: primero la oficial del servicio y luego las de clientes reales;
    *  si no hay de clientes, la galería (sin el recorte del Patrón). */
   photos(s: Service): string[] {
+    if (s.cardPhotos?.length) return s.cardPhotos;
     if (s.clientPhotos?.length) return [s.image, ...s.clientPhotos];
     return s.cutout ? s.gallery.filter((g) => g !== s.image) : s.gallery;
   }

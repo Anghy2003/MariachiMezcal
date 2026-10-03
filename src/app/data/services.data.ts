@@ -42,6 +42,8 @@ export interface Service {
   clientPhotos?: string[];
   /** Mostrar completas (sin recortar) las fotos horizontales en su tarjeta de paquetes. */
   fitWide?: boolean;
+  /** Fotos propias para la tarjeta de "Nuestros paquetes" (versiones verticales que llenan la tarjeta). */
+  cardPhotos?: string[];
   packages: ServicePackage[];
   addons: boolean;
   effect: EffectMode;
@@ -84,12 +86,11 @@ export const SERVICES: Service[] = [
     image: 'img/solista.webp',
     imagePosition: '50% 30%',
     // Solista mujer y varón primero (para que se vea que hay solistas mujeres) y las dos de Adrián al final
-    clientPhotos: ['img/solista-mujer.webp', 'img/solista-xavier.webp', 'img/solista-xavier-2.webp', 'img/momento-4.webp', 'img/momento-3.webp'],
+    clientPhotos: ['img/solista-mujer.webp', 'img/solista-xavier.webp', 'img/momento-4.webp', 'img/momento-3.webp'],
     gallery: [
       'img/solista.webp',
       'img/solista-mujer.webp',
       'img/solista-xavier.webp',
-      'img/solista-xavier-2.webp',
       'img/solista-3.webp',
       'img/solista-5.webp',
       'img/solista-6.webp',
@@ -180,7 +181,8 @@ export const SERVICES: Service[] = [
     image: 'img/trio-estudio.webp',
     imagePosition: '50% 40%',
     gallery: ['img/trio-estudio.webp', 'img/trio.webp'],
-    fitWide: true,
+    // Versión vertical de la foto del trío (fondo verde extendido) para que llene la tarjeta sin cortar a nadie
+    cardPhotos: ['img/trio-estudio-alto.webp', 'img/trio.webp'],
     packages: [
       {
         id: 'trio-6',
