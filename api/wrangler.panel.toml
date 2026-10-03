@@ -27,10 +27,10 @@ PANEL_URL = "https://panel.mariachimezcalcuenca.com"
 # Páginas que pueden enviar reservas desde otro origen (la página propia no lo necesita)
 ALLOWED_ORIGINS = ""
 # Cuentas de Google que pueden usar el panel (separadas por coma)
-ADMIN_EMAILS = "jannethbridge@gmail.com"
+ADMIN_EMAILS = "jannethbridge@gmail.com,aillescas278@gmail.com"
 # Cloudflare Access: se completan al proteger el panel
-ACCESS_TEAM_DOMAIN = ""
-ACCESS_AUD = ""
+ACCESS_TEAM_DOMAIN = "mariachimezcal.cloudflareaccess.com"
+ACCESS_AUD = "f6c279083b9fb7603bd162113122b607357d356540e178d4b7e4a0cb3650b574"
 
 [[d1_databases]]
 binding = "DB"
