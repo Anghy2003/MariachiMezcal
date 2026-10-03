@@ -44,6 +44,8 @@ export interface Service {
   fitWide?: boolean;
   /** Fotos propias para la tarjeta de "Nuestros paquetes" (versiones verticales que llenan la tarjeta). */
   cardPhotos?: string[];
+  /** Video corto (vertical, con marca de agua) que reemplaza las fotos en la tarjeta de paquetes. */
+  cardVideo?: { src: string; poster: string };
   packages: ServicePackage[];
   addons: boolean;
   effect: EffectMode;
@@ -271,9 +273,10 @@ export const SERVICES: Service[] = [
     priceLabel: '$70',
     image: 'img/misas-musicos.webp',
     imagePosition: '50% 40%',
-    gallery: ['img/misas-musicos.webp', 'img/pareja-iglesia.webp'],
+    gallery: ['img/misas-musicos.webp'],
     // Versión vertical (fondo de la iglesia extendido) para que la tarjeta muestre a los dos músicos
-    cardPhotos: ['img/misas-musicos-alto.webp', 'img/pareja-iglesia.webp'],
+    cardPhotos: ['img/misas-musicos-alto.webp'],
+    cardVideo: { src: 'video/misas.mp4', poster: 'video/misas.jpg' },
     packages: [{ id: 'misa', name: 'Cantantes para misa', note: 'Voz y piano o guitarra', price: 70 }],
     addons: false,
     effect: 'candle',

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Injector, afterNextRender, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Injector, afterNextRender, computed, inject, signal } from '@angular/core';
 import { ADDONS, Perk, SERVICES, Service } from '../data/services.data';
 import { NavigationService } from '../core/navigation.service';
 import { gsap, prefersReducedMotion } from '../core/motion';
@@ -40,8 +40,19 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
               <div class="flyer">
                 <!-- La foto ocupa toda la tarjeta; los recuadros van encima dejando verla entre ellos -->
                 <button class="bg" (click)="nav.service(s.slug)" [attr.aria-label]="s.name">
-                  <app-photo-cycle [images]="photos(s)" [fitWide]="!!s.clientPhotos?.length || !!s.fitWide" [position]="s.cutout ? '50% 15%' : (s.imagePosition ?? 'center')" [delay]="i * 700 + 400" />
+                  @if (s.cardVideo; as v) {
+                    <!-- Se reproduce en silencio solo mientras la tarjeta está a la vista -->
+                    <video class="card-video" [src]="v.src" [poster]="v.poster" [muted]="mutedSlug() !== s.slug" loop playsinline preload="none"
+                      disablepictureinpicture controlslist="nodownload noremoteplayback" (contextmenu)="$event.preventDefault()"></video>
+                  } @else {
+                    <app-photo-cycle [images]="photos(s)" [fitWide]="!!s.clientPhotos?.length || !!s.fitWide" [position]="s.cutout ? '50% 15%' : (s.imagePosition ?? 'center')" [delay]="i * 700 + 400" />
+                  }
                 </button>
+                @if (s.cardVideo) {
+                  <button class="sound" (click)="toggleSound(s.slug)" [attr.aria-label]="mutedSlug() === s.slug ? 'Silenciar' : 'Activar sonido'">
+                    <app-icon [name]="mutedSlug() === s.slug ? 'sound' : 'mute'" />
+                  </button>
+                }
                 <span class="title">{{ s.shortName }}</span>
 
                 <div class="tiles" [class.one]="s.packages.length === 1">
@@ -136,6 +147,9 @@ import { PhotoCycleComponent } from '../shared/photo-cycle.component';
     }
     .card:hover .flyer { transform: translateY(-4px); box-shadow: 0 0 0 1px var(--tomato-logo), 0 40px 60px -34px rgba(163, 74, 44, 0.55); }
     .bg { position: absolute; inset: 0; display: block; overflow: hidden; border-radius: inherit; }
+    .card-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .sound { position: absolute; z-index: 3; top: 14px; right: 26%; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; padding: 0; font-size: 18px; color: var(--cream); background: rgba(18, 22, 19, 0.55); backdrop-filter: blur(6px); box-shadow: inset 0 0 0 1px rgba(244, 238, 227, 0.35); transition: background 0.3s; }
+    .sound:hover { background: var(--tomato); }
     /* Oscurece arriba (para el título) y abajo (para los precios), el centro queda limpio */
     .bg::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(18, 22, 19, 0.75) 0%, transparent 30%, transparent 45%, rgba(18, 22, 19, 0.7) 100%); }
     .title { position: relative; z-index: 2; padding: 20px 22px 0; pointer-events: none; font-family: var(--font-serif); font-style: italic; font-weight: 500; font-size: clamp(34px, 3vw, 44px); line-height: 1; color: var(--cream); text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45); }
@@ -228,6 +242,14 @@ export class ServiciosComponent {
   /** "Recomendado" respeta el orden de la clienta: ... Grupos, Videollamadas y Misas al final. */
   readonly order = signal<'rec' | 'asc' | 'desc'>('rec');
   readonly addons = ADDONS;
+  /** Tarjeta cuyo video suena (solo una a la vez; null = todas en silencio). */
+  readonly mutedSlug = signal<string | null>(null);
+
+  toggleSound(slug: string): void {
+    this.mutedSlug.update((s) => (s === slug ? null : slug));
+    const v = this.host.querySelector<HTMLVideoElement>('.card-video');
+    if (v && this.mutedSlug()) v.play().catch(() => {});
+  }
 
   /** Fotos de fondo de la tarjeta: primero la oficial del servicio y luego las de clientes reales;
    *  si no hay de clientes, la galería (sin el recorte del Patrón). */
@@ -243,6 +265,18 @@ export class ServiciosComponent {
   };
   private readonly host = inject(ElementRef<HTMLElement>).nativeElement as HTMLElement;
   private readonly injector = inject(Injector);
+
+  constructor() {
+    // El video de la tarjeta se reproduce (en silencio) solo mientras se ve en pantalla.
+    let io: IntersectionObserver | undefined;
+    afterNextRender(() => {
+      const video = this.host.querySelector<HTMLVideoElement>('.card-video');
+      if (!video || prefersReducedMotion()) return;
+      io = new IntersectionObserver(([e]) => (e.isIntersecting ? video.play().catch(() => {}) : video.pause()), { threshold: 0.35 });
+      io.observe(video);
+    });
+    inject(DestroyRef).onDestroy(() => io?.disconnect());
+  }
 
   readonly sorted = computed(() => {
     if (this.order() === 'rec') return SERVICES;
