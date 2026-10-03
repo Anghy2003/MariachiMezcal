@@ -1,15 +1,12 @@
-# Página pública + backend de reservas de Mariachi Mezcal, en un solo Worker de Cloudflare.
-# La página (Angular) se sirve como archivos estáticos; todo lo que empieza por /api lo atiende src/index.ts.
-# Publicar:  (en la raíz) npm run build  y luego  (en api/) npx wrangler deploy
-# Probar en la computadora:  npm run db:migrate:local  y  npm run dev
-# Los secretos (claves) NO van aquí: en la computadora en .dev.vars; en Cloudflare con `wrangler secret put`.
-
-name = "mezcal"
+# Panel de la dueña: los mismos datos y el mismo código del backend, con los archivos del panel.
+# Publicar:  (en la raíz) npm run build:panel  y luego  (en api/) npx wrangler deploy -c wrangler.panel.toml
+# Queda protegido con Cloudflare Access (cuenta de Google de la dueña).
+name = "mezcal-panel"
 main = "src/index.ts"
 compatibility_date = "2026-09-01"
 
 [assets]
-directory = "../dist/mariachi-mezcal/browser"
+directory = "../dist/panel/browser"
 binding = "ASSETS"
 not_found_handling = "single-page-application"
 run_worker_first = ["/api/*"]

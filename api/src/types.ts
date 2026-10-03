@@ -1,6 +1,8 @@
 /** Configuración que Cloudflare le entrega al Worker (wrangler.toml + secretos). */
 export interface Env {
   DB: D1Database;
+  /** Archivos de la página o del panel (Workers static assets). */
+  ASSETS?: Fetcher;
   ENVIRONMENT: string;
   OWNER_EMAIL: string;
   FROM_EMAIL: string;

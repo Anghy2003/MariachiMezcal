@@ -29,6 +29,7 @@ export default {
         const m = url.pathname.match(/^\/api\/admin\/reservas\/([\w-]{8,40})$/);
         if (m && request.method === 'PATCH') return actualizar(m[1], request, env, ctx);
       }
+      if (!url.pathname.startsWith('/api/') && env.ASSETS) return env.ASSETS.fetch(request);
       return json({ error: 'no-encontrado' }, 404, cors);
     } catch (e) {
       console.error(e);
